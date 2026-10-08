@@ -1,0 +1,29 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const videos = [
+	{ title: "Getting started with Project Binder" },
+	{ title: "Tasks and Kanban" },
+	{ title: "Timers and timelogs" },
+	{ title: "Notes" },
+	{ title: "Files" },
+	{ title: "Database" },
+];
+---
+
+<Layout title="Learn — Project Binder">
+	<section>
+		<h1>Learn</h1>
+		<p>Video tutorials for Project Binder.</p>
+		<ul>
+			{
+				videos.map((video) => (
+					<li>
+						<div class="video-placeholder">Video placeholder</div>
+						<p>{video.title}</p>
+					</li>
+				))
+			}
+		</ul>
+	</section>
+</Layout>

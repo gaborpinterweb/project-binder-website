@@ -1,0 +1,129 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const screenshots = [
+	{ id: "projects", label: "Projects" },
+	{ id: "tasks", label: "Tasks" },
+	{ id: "timer", label: "Timer" },
+	{ id: "notes", label: "Notes" },
+	{ id: "files", label: "Files" },
+	{ id: "database", label: "Database" },
+];
+
+const features = [
+	"Is Project Binder free?",
+	"Does it work offline?",
+	"Can I manage tasks on a Kanban board?",
+	"Can I use a timer, Pomodoro, and stopwatch?",
+	"Can I keep notes per project?",
+	"Can I store files with my projects?",
+	"Is there a built-in database?",
+	"Does it run on macOS and Windows?",
+	"Can I log time against projects?",
+	"Can freelancers run everything in one app?",
+];
+---
+
+<Layout title="Project Binder — Free project management for freelancers">
+	<section id="hero">
+		<h1>
+			Free project management for freelancers with tasks, timelogs, notes, files, database and
+			more. Available for macOS and Windows.
+		</h1>
+
+		<div class="screenshot-gallery" data-gallery>
+			<div class="screenshot-main">
+				<button type="button" data-prev aria-label="Previous screenshot">←</button>
+				<figure>
+					<div class="screenshot-placeholder" data-main-label>Projects</div>
+					<figcaption data-main-caption>Projects</figcaption>
+				</figure>
+				<button type="button" data-next aria-label="Next screenshot">→</button>
+			</div>
+
+			<ul class="screenshot-thumbs">
+				{
+					screenshots.map((shot, index) => (
+						<li>
+							<button
+								type="button"
+								data-thumb
+								data-index={index}
+								aria-current={index === 0 ? "true" : "false"}
+							>
+								<span class="thumb-placeholder">{shot.label}</span>
+								<span>{shot.label}</span>
+							</button>
+						</li>
+					))
+				}
+			</ul>
+		</div>
+	</section>
+
+	<section id="learn">
+		<h2>Learn</h2>
+		<ul>
+			<li>
+				<div class="video-placeholder">Video placeholder 1</div>
+				<p>Getting started with Project Binder</p>
+			</li>
+			<li>
+				<div class="video-placeholder">Video placeholder 2</div>
+				<p>Tasks and Kanban</p>
+			</li>
+			<li>
+				<div class="video-placeholder">Video placeholder 3</div>
+				<p>Timers and timelogs</p>
+			</li>
+		</ul>
+		<p><a href="/learn">All videos</a></p>
+	</section>
+
+	<section id="features">
+		<h2>With Project Binder, it’s a Yes!</h2>
+		<p>
+			Even though Project Binder is simple and easy to use, it’s also flexible. There’s so much you
+			can do with it — and so much it can do for you.
+		</p>
+		<ul>
+			{features.map((feature) => <li>{feature}</li>)}
+		</ul>
+	</section>
+
+	<section id="about">
+		<h2>About</h2>
+		<p>
+			From freelancer to freelancer. Hi, I'm Gábor and I made Project Binder for myself, but then.
+		</p>
+	</section>
+</Layout>
+
+<script>
+	const labels = ["Projects", "Tasks", "Timer", "Notes", "Files", "Database"];
+	const gallery = document.querySelector("[data-gallery]");
+	if (gallery) {
+		let current = 0;
+		const mainLabel = gallery.querySelector("[data-main-label]");
+		const mainCaption = gallery.querySelector("[data-main-caption]");
+		const thumbs = gallery.querySelectorAll("[data-thumb]");
+
+		function show(index: number) {
+			current = (index + labels.length) % labels.length;
+			if (mainLabel) mainLabel.textContent = labels[current];
+			if (mainCaption) mainCaption.textContent = labels[current];
+			thumbs.forEach((thumb, i) => {
+				thumb.setAttribute("aria-current", i === current ? "true" : "false");
+			});
+		}
+
+		gallery.querySelector("[data-prev]")?.addEventListener("click", () => show(current - 1));
+		gallery.querySelector("[data-next]")?.addEventListener("click", () => show(current + 1));
+		thumbs.forEach((thumb) => {
+			thumb.addEventListener("click", () => {
+				const index = Number((thumb as HTMLElement).dataset.index);
+				show(index);
+			});
+		});
+	}
+</script>
