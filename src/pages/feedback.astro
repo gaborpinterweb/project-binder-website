@@ -5,6 +5,56 @@ import Layout from "../layouts/Layout.astro";
 <Layout title="Feedback — Project Binder">
 	<section>
 		<h1>Feedback</h1>
-		<p class="empty-state">No feedback form yet</p>
+		<iframe
+			data-tally-src="https://tally.so/embed/0Q2ZVy?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1"
+			loading="lazy"
+			width="100%"
+			height="552"
+			frameborder="0"
+			marginheight="0"
+			marginwidth="0"
+			title="Project Binder feedback"
+			class="tally-embed"
+		></iframe>
 	</section>
+
+	<script is:inline>
+		var d = document,
+			w = "https://tally.so/widgets/embed.js",
+			v = function () {
+				"undefined" != typeof Tally
+					? Tally.loadEmbeds()
+					: d
+							.querySelectorAll("iframe[data-tally-src]:not([src])")
+							.forEach(function (e) {
+								e.src = e.dataset.tallySrc;
+							});
+			};
+		if ("undefined" != typeof Tally) v();
+		else if (d.querySelector('script[src="' + w + '"]') == null) {
+			var s = d.createElement("script");
+			s.src = w;
+			s.onload = v;
+			s.onerror = v;
+			d.body.appendChild(s);
+		}
+	</script>
 </Layout>
+
+<style>
+	.feedback-lede {
+		max-width: var(--max);
+		margin-inline: auto;
+		margin-bottom: 1.5rem;
+		text-align: center;
+	}
+
+	.tally-embed {
+		display: block;
+		width: 100%;
+		max-width: var(--max);
+		margin-inline: auto;
+		border: 0;
+		min-height: 552px;
+	}
+</style>
