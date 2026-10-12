@@ -14,6 +14,10 @@ interface Release {
 	assets: ReleaseAsset[];
 }
 
+interface Env {
+	ASSETS: Fetcher;
+}
+
 function isPlatform(value: string | null): value is Platform {
 	return value === "macos" || value === "windows";
 }
@@ -72,8 +76,8 @@ function redirect(url: string): Response {
 	return Response.redirect(url, 302);
 }
 
-export async function onRequestGet(context: { request: Request }): Promise<Response> {
-	const platformParam = new URL(context.request.url).searchParams.get("platform");
+async function handleDownload(request: Request): Promise<Response> {
+	const platformParam = new URL(request.url).searchParams.get("platform");
 	if (!isPlatform(platformParam)) {
 		return redirect(FALLBACK);
 	}
@@ -94,3 +98,15 @@ export async function onRequestGet(context: { request: Request }): Promise<Respo
 		return redirect(FALLBACK);
 	}
 }
+
+export default {
+	async fetch(request: Request, env: Env): Promise<Response> {
+		const url = new URL(request.url);
+
+		if (url.pathname === "/download") {
+			return handleDownload(request);
+		}
+
+		return env.ASSETS.fetch(request);
+	},
+};

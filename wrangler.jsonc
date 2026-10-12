@@ -1,0 +1,11 @@
+{
+	"name": "project-binder-website",
+	"compatibility_date": "2026-10-12",
+	"main": "worker/index.ts",
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS",
+		"not_found_handling": "404-page",
+		"run_worker_first": ["/download"]
+	}
+}
