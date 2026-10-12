@@ -1,13 +1,20 @@
 ---
+import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
+import projectsShot from "../assets/screenshots/projects.png";
+import tasksShot from "../assets/screenshots/tasks.png";
+import timelogsShot from "../assets/screenshots/timelogs.png";
+import notesShot from "../assets/screenshots/notes.png";
+import filesShot from "../assets/screenshots/files.png";
+import databasesShot from "../assets/screenshots/databases.png";
 
 const screenshots = [
-	{ id: "projects", label: "Projects" },
-	{ id: "tasks", label: "Tasks" },
-	{ id: "timer", label: "Timer" },
-	{ id: "notes", label: "Notes" },
-	{ id: "files", label: "Files" },
-	{ id: "database", label: "Database" },
+	{ id: "projects", label: "Projects", image: projectsShot },
+	{ id: "tasks", label: "Tasks", image: tasksShot },
+	{ id: "timelogs", label: "Timelogs", image: timelogsShot },
+	{ id: "notes", label: "Notes", image: notesShot },
+	{ id: "files", label: "Files", image: filesShot },
+	{ id: "databases", label: "Databases", image: databasesShot },
 ];
 
 const features = [
@@ -25,7 +32,6 @@ const features = [
 	"Can I create databases for my projects?",
 	"Can I import / export / backup my data?",
 	"Can I use Project Binder without ads or paywalls, forever?",
-	
 ];
 
 const titleChips = [
@@ -94,7 +100,24 @@ const titleChips = [
 
 		<div class="screenshot-gallery" data-gallery>
 			<div class="screenshot-main">
-				<div class="screenshot-placeholder" data-main-label>Projects</div>
+				{
+					screenshots.map((shot, index) => (
+						<figure
+							class="screenshot-frame"
+							data-main-shot
+							data-index={index}
+							hidden={index !== 0}
+						>
+							<Image
+								src={shot.image}
+								alt={`Project Binder — ${shot.label}`}
+								widths={[640, 960, 1280, 1710]}
+								sizes="(max-width: 960px) 100vw, 960px"
+								quality={85}
+							/>
+						</figure>
+					))
+				}
 			</div>
 
 			<ul class="screenshot-thumbs">
@@ -106,8 +129,16 @@ const titleChips = [
 								data-thumb
 								data-index={index}
 								aria-current={index === 0 ? "true" : "false"}
+								aria-label={`Show ${shot.label} screenshot`}
 							>
-								<span class="thumb-placeholder">{shot.label}</span>
+								<span class="thumb-frame">
+									<Image
+										src={shot.image}
+										alt=""
+										width={280}
+										quality={70}
+									/>
+								</span>
 								<span>{shot.label}</span>
 							</button>
 						</li>
@@ -163,16 +194,17 @@ const titleChips = [
 </Layout>
 
 <script>
-	const labels = ["Projects", "Tasks", "Timer", "Notes", "Files", "Database"];
 	const gallery = document.querySelector("[data-gallery]");
 	if (gallery) {
-		let current = 0;
-		const mainLabel = gallery.querySelector("[data-main-label]");
+		const shots = gallery.querySelectorAll("[data-main-shot]");
 		const thumbs = gallery.querySelectorAll("[data-thumb]");
+		const count = shots.length;
 
 		function show(index: number) {
-			current = (index + labels.length) % labels.length;
-			if (mainLabel) mainLabel.textContent = labels[current];
+			const current = ((index % count) + count) % count;
+			shots.forEach((shot, i) => {
+				(shot as HTMLElement).hidden = i !== current;
+			});
 			thumbs.forEach((thumb, i) => {
 				thumb.setAttribute("aria-current", i === current ? "true" : "false");
 			});

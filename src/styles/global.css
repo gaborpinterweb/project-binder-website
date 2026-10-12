@@ -146,6 +146,9 @@ nav {
 }
 
 nav a {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3rem;
 	color: var(--ink-muted);
 	text-decoration: none;
 	font-weight: 500;
@@ -153,6 +156,11 @@ nav a {
 
 nav a:hover {
 	color: var(--ink);
+}
+
+nav .external-icon {
+	flex-shrink: 0;
+	opacity: 0.75;
 }
 
 main {
@@ -288,21 +296,28 @@ section:first-child {
 	grid-template-columns: 1fr;
 }
 
-.screenshot-placeholder,
-.thumb-placeholder {
-	display: grid;
-	place-items: center;
+.screenshot-frame,
+.thumb-frame {
+	margin: 0;
+	overflow: hidden;
 	background: var(--bg-soft);
 	border: 1px solid var(--line);
-	color: var(--ink-muted);
 }
 
-.screenshot-placeholder {
-	aspect-ratio: 16 / 10;
+.screenshot-frame {
 	border-radius: var(--radius);
-	font-size: 1.05rem;
-	font-weight: 600;
 	box-shadow: 0 8px 28px color-mix(in srgb, var(--side) 8%, transparent);
+}
+
+.screenshot-frame[hidden] {
+	display: none;
+}
+
+.screenshot-frame img,
+.thumb-frame img {
+	display: block;
+	width: 100%;
+	height: auto;
 }
 
 .screenshot-thumbs {
@@ -329,19 +344,17 @@ section:first-child {
 	background: none;
 	font-size: 0.8rem;
 	color: var(--ink-muted);
+	cursor: pointer;
 }
 
-.thumb-placeholder {
+.thumb-frame {
 	width: 100%;
-	aspect-ratio: 16 / 10;
 	border-radius: calc(var(--radius) - 6px);
-	font-size: 0.7rem;
 }
 
-.screenshot-thumbs button[aria-current="true"] .thumb-placeholder {
+.screenshot-thumbs button[aria-current="true"] .thumb-frame {
 	border-color: var(--accent);
 	box-shadow: 0 0 0 1px var(--accent);
-	color: var(--ink);
 }
 
 .screenshot-thumbs button[aria-current="true"] {
@@ -356,6 +369,10 @@ section:first-child {
 	letter-spacing: 0.06em;
 	text-transform: uppercase;
 	color: var(--ink-muted);
+}
+
+#features {
+	border-top: none;
 }
 
 #features ul {
