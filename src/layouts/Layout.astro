@@ -10,16 +10,11 @@ const { title } = Astro.props;
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="icon" href="/favicon.ico" sizes="any" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap"
-			rel="stylesheet"
-		/>
+		<meta name="theme-color" content="#f5f5f7" />
 		<title>{title}</title>
 	</head>
 	<body>
@@ -29,8 +24,9 @@ const { title } = Astro.props;
 				<span>Project Binder</span>
 			</a>
 			<nav>
-				<a href="/">Home</a>
-				<a href="/learn">Learn</a>
+				<a href="/#features">Features</a>
+				<a href="/feedback">Feedback</a>
+				<a href="https://github.com/gaborpinterweb/project-binder">GitHub</a>
 			</nav>
 		</header>
 		<main>

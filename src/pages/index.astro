@@ -11,27 +11,77 @@ const screenshots = [
 ];
 
 const features = [
-	"Is Project Binder free?",
-	"Does it work offline?",
+	"Is Project Binder free and open-source?",
+	"Can I use it offline without any services or accounts?",
 	"Can I manage tasks on a Kanban board?",
-	"Can I use a timer, Pomodoro, and stopwatch?",
-	"Can I keep notes per project?",
+	"Can I add files to my tasks?",
+	"Can I see all my tasks at once on a master board?",
+	"Can I track time using a stopwatch or countdown timer?",
+	"Can I see my timelogs grouped by projects and date?",
+	"Can I take notes and build a knowledge base?",
+	"Can I use markdown and add tables and images to my notes?",
 	"Can I store files with my projects?",
-	"Is there a built-in database?",
-	"Does it run on macOS and Windows?",
-	"Can I log time against projects?",
-	"Can freelancers run everything in one app?",
+	"Can I preview PDF, DOCX, XLSX, PPTX and other files in-app?",
+	"Can I create databases for my projects?",
+	"Can I import / export / backup my data?",
+	"Can I use Project Binder without ads or paywalls, forever?",
+	
+];
+
+const titleChips = [
+	{
+		label: "Tasks",
+		icon: `<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>`,
+	},
+	{
+		label: "Timelogs",
+		icon: `<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>`,
+	},
+	{
+		label: "Notes",
+		icon: `<path d="M2 6a2 2 0 0 1 2-2h10l4 4v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2Z"/><path d="M14 4v4h4"/><path d="M8 13h6"/><path d="M8 17h4"/>`,
+	},
+	{
+		label: "Files",
+		icon: `<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9l-.81-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>`,
+	},
+	{
+		label: "Databases",
+		icon: `<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/>`,
+	},
 ];
 ---
 
 <Layout title="Project Binder — Free project management for freelancers">
 	<section id="hero">
 		<h1>
-			Free project management for freelancers with tasks, timelogs, notes, files, database and
-			more.
+			Project management for freelancers with
+			<span class="title-chips">
+				{
+					titleChips.map((chip) => (
+						<span class="title-chip">
+							<svg
+								viewBox="0 0 24 24"
+								aria-hidden="true"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								set:html={chip.icon}
+							/>
+							{chip.label}
+						</span>
+					))
+				}
+			</span>
+			...for absolutely free!
 		</h1>
 		<div class="hero-ctas">
-			<a class="cta" href="#">
+			<a
+				class="cta"
+				href="https://github.com/gaborpinterweb/project-binder/releases/latest"
+			>
 				<svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18">
 					<path
 						fill="currentColor"
@@ -40,25 +90,11 @@ const features = [
 				</svg>
 				<span>Download for macOS</span>
 			</a>
-			<a class="cta" href="#">
-				<svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18">
-					<path
-						fill="currentColor"
-						d="M3 5.5 10.5 4.4v7.1H3Zm8.2-1.3L21 2.5v9H11.2Zm0 8.3H21V21.5l-9.8-1.4Zm-1.7.1v6.8L3 18.5v-5.9Z"
-					></path>
-				</svg>
-				<span>Download for Windows</span>
-			</a>
 		</div>
 
 		<div class="screenshot-gallery" data-gallery>
 			<div class="screenshot-main">
-				<button type="button" data-prev aria-label="Previous screenshot">←</button>
-				<figure>
-					<div class="screenshot-placeholder" data-main-label>Projects</div>
-					<figcaption data-main-caption>Projects</figcaption>
-				</figure>
-				<button type="button" data-next aria-label="Next screenshot">→</button>
+				<div class="screenshot-placeholder" data-main-label>Projects</div>
 			</div>
 
 			<ul class="screenshot-thumbs">
@@ -81,41 +117,48 @@ const features = [
 		</div>
 	</section>
 
-	<section id="learn">
-		<h2>Learn</h2>
-		<ul>
-			<li>
-				<div class="video-placeholder">Video placeholder 1</div>
-				<p>Getting started with Project Binder</p>
-			</li>
-			<li>
-				<div class="video-placeholder">Video placeholder 2</div>
-				<p>Tasks and Kanban</p>
-			</li>
-			<li>
-				<div class="video-placeholder">Video placeholder 3</div>
-				<p>Timers and timelogs</p>
-			</li>
-		</ul>
-		<p><a href="/learn">All videos</a></p>
-	</section>
-
 	<section id="features">
-		<h2>With Project Binder, it’s a Yes!</h2>
-		<p>
-			Even though Project Binder is simple and easy to use, it’s also flexible. There’s so much you
-			can do with it — and so much it can do for you.
-		</p>
+		<h2>Features</h2>
 		<ul>
-			{features.map((feature) => <li>{feature}</li>)}
+			{
+				features.map((feature) => (
+					<li>
+						<span class="feature-check" aria-hidden="true">
+							<svg viewBox="0 0 24 24" width="14" height="14" fill="none">
+								<path
+									d="M5 12.5l4.5 4.5L19 7"
+									stroke="currentColor"
+									stroke-width="3"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
+							</svg>
+						</span>
+						<span class="feature-text">
+							<strong class="feature-q">{feature}</strong>
+							<span class="feature-yes">YES!</span>
+						</span>
+					</li>
+				))
+			}
 		</ul>
 	</section>
 
-	<section id="about">
-		<h2>About</h2>
-		<p>
-			From freelancer to freelancer. Hi, I'm Gábor and I made Project Binder for myself, but then.
-		</p>
+	<section id="final-cta">
+		<h2>Get Project Binder</h2>
+		<p>Free. Offline. Open source. One app for your freelance projects.</p>
+		<a
+			class="cta cta-giant"
+			href="https://github.com/gaborpinterweb/project-binder/releases/latest"
+		>
+			<svg viewBox="0 0 24 24" aria-hidden="true" width="22" height="22">
+				<path
+					fill="currentColor"
+					d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.22-2 1.08-3.15-1.05.05-2.31.72-3.05 1.6-.66.78-1.24 2.04-1.08 3.23 1.14.09 2.31-.58 3.05-1.68"
+				></path>
+			</svg>
+			<span>Download for macOS</span>
+		</a>
 	</section>
 </Layout>
 
@@ -125,20 +168,16 @@ const features = [
 	if (gallery) {
 		let current = 0;
 		const mainLabel = gallery.querySelector("[data-main-label]");
-		const mainCaption = gallery.querySelector("[data-main-caption]");
 		const thumbs = gallery.querySelectorAll("[data-thumb]");
 
 		function show(index: number) {
 			current = (index + labels.length) % labels.length;
 			if (mainLabel) mainLabel.textContent = labels[current];
-			if (mainCaption) mainCaption.textContent = labels[current];
 			thumbs.forEach((thumb, i) => {
 				thumb.setAttribute("aria-current", i === current ? "true" : "false");
 			});
 		}
 
-		gallery.querySelector("[data-prev]")?.addEventListener("click", () => show(current - 1));
-		gallery.querySelector("[data-next]")?.addEventListener("click", () => show(current + 1));
 		thumbs.forEach((thumb) => {
 			thumb.addEventListener("click", () => {
 				const index = Number((thumb as HTMLElement).dataset.index);
