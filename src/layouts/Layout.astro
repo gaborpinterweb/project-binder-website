@@ -23,7 +23,16 @@ const { title } = Astro.props;
 				<img src="/project-binder-icon.png" alt="" width="28" height="28" />
 				<span>Project Binder</span>
 			</a>
-			<nav>
+			<button
+				type="button"
+				class="menu-toggle"
+				aria-expanded="false"
+				aria-controls="site-nav"
+				aria-label="Open menu"
+			>
+				<span class="menu-toggle-bars" aria-hidden="true"></span>
+			</button>
+			<nav id="site-nav">
 				<a href="/#features">Features</a>
 				<a href="/feedback">Feedback</a>
 				<a
@@ -51,13 +60,39 @@ const { title } = Astro.props;
 				</a>
 			</nav>
 		</header>
+		<script>
+			const toggle = document.querySelector(".menu-toggle");
+			const nav = document.querySelector("#site-nav");
+			if (toggle instanceof HTMLButtonElement && nav instanceof HTMLElement) {
+				const setOpen = (open: boolean) => {
+					toggle.setAttribute("aria-expanded", String(open));
+					toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+					nav.classList.toggle("is-open", open);
+					document.body.classList.toggle("nav-open", open);
+				};
+
+				toggle.addEventListener("click", () => {
+					setOpen(toggle.getAttribute("aria-expanded") !== "true");
+				});
+
+				nav.querySelectorAll("a").forEach((link) => {
+					link.addEventListener("click", () => setOpen(false));
+				});
+
+				document.addEventListener("keydown", (event) => {
+					if (event.key === "Escape") setOpen(false);
+				});
+			}
+		</script>
 		<main>
 			<slot />
 		</main>
 		<footer>
 			<p>
-				Created by <a href="https://gaborpinter.com" target="_blank" rel="noopener noreferrer"
-					>Gábor Pintér</a
+				Created by <a
+					href="https://gaborpinter.com/?utm_source=project-binder&utm_medium=referral&utm_campaign=footer"
+					target="_blank"
+					rel="noopener noreferrer">Gábor Pintér</a
 				>.
 			</p>
 		</footer>

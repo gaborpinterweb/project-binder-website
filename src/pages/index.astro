@@ -129,6 +129,25 @@ const titleChips = [
 				}
 			</div>
 
+			<div class="screenshot-slider" data-slider tabindex="0" aria-label="App screenshots">
+				{
+					screenshots.map((shot, index) => (
+						<figure class="screenshot-slide" data-slide data-index={index}>
+							<div class="screenshot-frame">
+								<Image
+									src={shot.image}
+									alt={`Project Binder — ${shot.label}`}
+									widths={[480, 720, 960]}
+									sizes="(max-width: 720px) 78vw, 480px"
+									quality={85}
+								/>
+							</div>
+							<figcaption>{shot.label}</figcaption>
+						</figure>
+					))
+				}
+			</div>
+
 			<ul class="screenshot-thumbs">
 				{
 					screenshots.map((shot, index) => (
@@ -174,10 +193,8 @@ const titleChips = [
 								/>
 							</svg>
 						</span>
-						<span class="feature-text">
-							<strong class="feature-q">{feature}</strong>
-							<span class="feature-yes">YES!</span>
-						</span>
+						<strong class="feature-q">{feature}</strong>
+						<span class="feature-yes">YES!</span>
 					</li>
 				))
 			}
@@ -211,6 +228,8 @@ const titleChips = [
 	if (gallery) {
 		const shots = gallery.querySelectorAll("[data-main-shot]");
 		const thumbs = gallery.querySelectorAll("[data-thumb]");
+		const slider = gallery.querySelector("[data-slider]");
+		const slides = gallery.querySelectorAll("[data-slide]");
 		const count = shots.length;
 
 		function show(index: number) {
@@ -221,6 +240,9 @@ const titleChips = [
 			thumbs.forEach((thumb, i) => {
 				thumb.setAttribute("aria-current", i === current ? "true" : "false");
 			});
+			slides.forEach((slide, i) => {
+				slide.classList.toggle("is-active", i === current);
+			});
 		}
 
 		thumbs.forEach((thumb) => {
@@ -229,5 +251,29 @@ const titleChips = [
 				show(index);
 			});
 		});
+
+		if (slider instanceof HTMLElement && slides.length > 0) {
+			const syncFromScroll = () => {
+				const sliderRect = slider.getBoundingClientRect();
+				const center = sliderRect.left + sliderRect.width / 2;
+				let nearest = 0;
+				let nearestDist = Infinity;
+				slides.forEach((slide, i) => {
+					const rect = (slide as HTMLElement).getBoundingClientRect();
+					const dist = Math.abs(rect.left + rect.width / 2 - center);
+					if (dist < nearestDist) {
+						nearestDist = dist;
+						nearest = i;
+					}
+				});
+				show(nearest);
+			};
+
+			slider.addEventListener("scroll", () => {
+				window.requestAnimationFrame(syncFromScroll);
+			}, { passive: true });
+
+			show(0);
+		}
 	}
 </script>
