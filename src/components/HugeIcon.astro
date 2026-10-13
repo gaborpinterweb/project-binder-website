@@ -1,0 +1,27 @@
+---
+import { hugeIconHtml } from "../lib/hugeicon";
+
+type IconNode = [string, Record<string, string | number>];
+
+interface Props {
+	icon: IconNode[];
+	size?: number;
+	label?: string;
+	class?: string;
+}
+
+const { icon, size = 24, label, class: className } = Astro.props;
+const markup = hugeIconHtml(icon);
+---
+
+<svg
+	class={className}
+	viewBox="0 0 24 24"
+	width={size}
+	height={size}
+	fill="none"
+	aria-hidden={label ? undefined : "true"}
+	role={label ? "img" : undefined}
+	aria-label={label}
+	set:html={markup}
+/>

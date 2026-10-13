@@ -12,6 +12,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@hugeicons/core-free-icons": "^4.3.5",
     "astro": "^7.3.7"
   },
   "allowScripts": {

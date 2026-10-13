@@ -99,6 +99,12 @@ p:last-child {
 	margin-bottom: 0;
 }
 
+@media (max-width: 720px) {
+	.br-desktop {
+		display: none;
+	}
+}
+
 ul {
 	margin: 0;
 	padding: 0;
@@ -239,20 +245,36 @@ footer p {
 	color: var(--ink-muted);
 }
 
-footer a {
+footer p a {
 	font-weight: inherit;
 	color: inherit;
 	text-decoration: none;
 }
 
-footer a:hover {
+footer p a:hover {
 	color: inherit;
 	text-decoration: underline;
 }
 
+.bmc-button {
+	display: inline-block;
+	margin-top: 1rem;
+	line-height: 0;
+	transition: opacity 0.15s ease;
+}
+
+.bmc-button:hover {
+	opacity: 0.85;
+}
+
+.bmc-button img {
+	display: block;
+	height: 40px;
+	width: auto;
+}
+
 section {
 	padding: 2.25rem 0;
-	border-top: 1px solid var(--line);
 }
 
 section:first-child {
@@ -498,6 +520,139 @@ section:first-child {
 	letter-spacing: 0.06em;
 	text-transform: uppercase;
 	color: var(--ink-muted);
+}
+
+#problem {
+	text-align: center;
+	padding: 3.5rem 0;
+}
+
+#problem .eyebrow {
+	color: var(--pc-cherry);
+}
+
+#problem h2 {
+	max-width: 36rem;
+	margin-inline: auto;
+	font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+	letter-spacing: -0.02em;
+	line-height: 1.25;
+}
+
+.app-switcher {
+	width: fit-content;
+	max-width: 100%;
+	margin: 1.75rem auto 0;
+	color: #1a1a1a;
+}
+
+.app-switcher-rail {
+	position: relative;
+	width: fit-content;
+	max-width: 100%;
+	padding: 0.55rem 0.65rem;
+	border-radius: 22px;
+	background: linear-gradient(180deg, #f0f0f0 0%, #d8d8d8 100%);
+	border: 1px solid #bdbdbd;
+	box-shadow:
+		0 10px 28px rgba(0, 0, 0, 0.12),
+		inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.app-switcher-apps {
+	display: flex;
+	align-items: center;
+	gap: 0.35rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.app-switcher-highlight {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 0;
+	border-radius: 14px;
+	background: color-mix(in srgb, var(--pc-cherry) 22%, transparent);
+	pointer-events: none;
+	opacity: 0;
+	will-change: transform, width, height;
+}
+
+.app-switcher-highlight.is-ready {
+	opacity: 1;
+	transition:
+		transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+		width 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+		height 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+		opacity 0.2s ease;
+}
+
+.app-switcher-highlight.is-ready.is-return {
+	transition-duration: 0.25s;
+}
+
+.app-switcher-item {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.3rem;
+	border-radius: 14px;
+}
+
+.app-switcher-icon {
+	display: grid;
+	place-items: center;
+	width: 3.25rem;
+	height: 3.25rem;
+	border-radius: 16px;
+	background: linear-gradient(180deg, #ffffff 0%, #e8e8e8 100%);
+	border: 1px solid #c4c4c4;
+	color: #111;
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.app-switcher-icon svg {
+	display: block;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.app-switcher-highlight.is-ready {
+		transition: none;
+	}
+}
+
+#problem > p:not(.eyebrow) {
+	max-width: 42rem;
+	margin: 1.25rem auto 0;
+	font-size: 1.1rem;
+	line-height: 1.55;
+	color: var(--ink-muted);
+}
+
+@media (max-width: 560px) {
+	.app-switcher-rail {
+		padding: 0.45rem 0.5rem;
+		border-radius: 18px;
+	}
+
+	.app-switcher-apps {
+		gap: 0.2rem;
+	}
+
+	.app-switcher-icon {
+		width: 2.55rem;
+		height: 2.55rem;
+		border-radius: 12px;
+	}
+
+	.app-switcher-icon svg {
+		width: 28px;
+		height: 28px;
+	}
 }
 
 #features {

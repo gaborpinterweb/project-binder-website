@@ -1,5 +1,14 @@
 ---
 import { Image } from "astro:assets";
+import {
+	AppleFinderIcon,
+	GoogleDocIcon,
+	GoogleDriveIcon,
+	GoogleSheetIcon,
+	Notion02Icon,
+	TrelloIcon,
+} from "@hugeicons/core-free-icons";
+import HugeIcon from "../components/HugeIcon.astro";
 import Layout from "../layouts/Layout.astro";
 import projectsShot from "../assets/screenshots/projects.png";
 import tasksShot from "../assets/screenshots/tasks.png";
@@ -7,6 +16,15 @@ import timelogsShot from "../assets/screenshots/timelogs.png";
 import notesShot from "../assets/screenshots/notes.png";
 import filesShot from "../assets/screenshots/files.png";
 import databasesShot from "../assets/screenshots/databases.png";
+
+const switcherApps = [
+	{ label: "Finder", icon: AppleFinderIcon },
+	{ label: "Trello", icon: TrelloIcon },
+	{ label: "Notion", icon: Notion02Icon },
+	{ label: "Google Drive", icon: GoogleDriveIcon },
+	{ label: "Google Sheets", icon: GoogleSheetIcon },
+	{ label: "Google Docs", icon: GoogleDocIcon },
+];
 
 const screenshots = [
 	{ id: "projects", label: "Projects", image: projectsShot },
@@ -177,6 +195,37 @@ const titleChips = [
 		</div>
 	</section>
 
+	<section id="problem">
+		<p class="eyebrow">The problem</p>
+		<h2>Context switching makes you<br class="br-desktop" />unfocused and exhausted</h2>
+		<div
+			class="app-switcher"
+			data-app-switcher
+			role="img"
+			aria-label="macOS app switcher showing Finder, Trello, Notion, Google Drive, Google Sheets, and Google Docs"
+		>
+			<div class="app-switcher-rail">
+				<span class="app-switcher-highlight" data-switcher-highlight aria-hidden="true"></span>
+				<ul class="app-switcher-apps">
+					{
+						switcherApps.map((app) => (
+							<li class="app-switcher-item">
+								<span class="app-switcher-icon">
+									<HugeIcon icon={app.icon} size={36} />
+								</span>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</div>
+		<p>
+			Project Binder provides you a simple, yet scalable workspace<br class="br-desktop" />
+			to organise your freelancing business,<br class="br-desktop" />
+			so deep work feels possible again.
+		</p>
+	</section>
+
 	<section id="features">
 		<h2>Features</h2>
 		<ul>
@@ -203,7 +252,7 @@ const titleChips = [
 	</section>
 
 	<section id="final-cta">
-		<h2>Get product updates<br />and freelancing tips</h2>
+		<h2>Get product updates<br class="br-desktop" />and freelancing tips</h2>
 		<form
 			class="newsletter-form"
 			action="https://buttondown.com/api/emails/embed-subscribe/gaborpinterweb"
@@ -275,6 +324,52 @@ const titleChips = [
 			}, { passive: true });
 
 			show(0);
+		}
+	}
+
+	const switcher = document.querySelector("[data-app-switcher]");
+	if (switcher instanceof HTMLElement) {
+		const rail = switcher.querySelector(".app-switcher-rail");
+		const highlight = switcher.querySelector("[data-switcher-highlight]");
+		const items = switcher.querySelectorAll(".app-switcher-item");
+		const dwellMs = 4000;
+		const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+		let index = 0;
+
+		function placeHighlight(i: number, returning = false) {
+			if (!(highlight instanceof HTMLElement) || !(rail instanceof HTMLElement)) return;
+			const item = items[i] as HTMLElement | undefined;
+			if (!item) return;
+
+			highlight.classList.toggle("is-return", returning);
+			// Absolute children are positioned from the padding edge; subtract the border
+			// (clientLeft/Top) so the highlight lines up with the item box.
+			const railRect = rail.getBoundingClientRect();
+			const itemRect = item.getBoundingClientRect();
+			const x = itemRect.left - railRect.left - rail.clientLeft + rail.scrollLeft;
+			const y = itemRect.top - railRect.top - rail.clientTop + rail.scrollTop;
+			highlight.style.width = `${itemRect.width}px`;
+			highlight.style.height = `${itemRect.height}px`;
+			highlight.style.transform = `translate(${x}px, ${y}px)`;
+		}
+
+		function scheduleNext() {
+			window.setTimeout(() => {
+				const atLast = index === items.length - 1;
+				index = atLast ? 0 : index + 1;
+				placeHighlight(index, atLast);
+				scheduleNext();
+			}, dwellMs);
+		}
+
+		placeHighlight(0, false);
+		requestAnimationFrame(() => {
+			if (highlight instanceof HTMLElement) highlight.classList.add("is-ready");
+		});
+
+		if (!reduceMotion && items.length > 1) {
+			scheduleNext();
+			window.addEventListener("resize", () => placeHighlight(index, false));
 		}
 	}
 </script>
