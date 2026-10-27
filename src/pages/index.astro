@@ -19,7 +19,7 @@ import {
 	TaskDone01Icon,
 	TrelloIcon,
 } from "@hugeicons/core-free-icons";
-import { BellRing } from "lucide";
+import { ArrowUpRight, BellRing } from "lucide";
 import HugeIcon from "../components/HugeIcon.astro";
 import Layout from "../layouts/Layout.astro";
 import { hugeIconHtml } from "../lib/hugeicon";
@@ -31,6 +31,9 @@ import filesShot from "../assets/screenshots/files.png";
 import databasesShot from "../assets/screenshots/databases.png";
 
 const subscribeBellHtml = hugeIconHtml(BellRing);
+const openAppArrowHtml = hugeIconHtml(ArrowUpRight);
+const githubMarkPath =
+	"M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 .1.7 1.6 2.7 1.1.1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3";
 
 const switcherApps = [
 	{ label: "Finder", icon: AppleFinderIcon },
@@ -136,28 +139,26 @@ const newsletterDecor = [
 
 <Layout title="Project Binder - Open-source project management for freelancers">
 	<section id="hero">
-		<h1>
-			Open-source project management for freelancers with
-			<span class="title-chips">
-				{
-					titleChips.map((chip) => (
-						<span class="title-chip">
-							<svg
-								viewBox="0 0 24 24"
-								aria-hidden="true"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								set:html={chip.icon}
-							/>
-							{chip.label}
-						</span>
-					))
-				}
-			</span>
-		</h1>
+		<h1>Open-source project management for freelancers</h1>
+		<ul class="hero-topics" aria-label="What you can organise">
+			{
+				titleChips.map((chip) => (
+					<li class="title-chip">
+						<svg
+							viewBox="0 0 24 24"
+							aria-hidden="true"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							set:html={chip.icon}
+						/>
+						{chip.label}
+					</li>
+				))
+			}
+		</ul>
 		<div class="hero-ctas">
 			<a
 				class="cta cta-blue"
@@ -175,9 +176,8 @@ const newsletterDecor = [
 					stroke-width="2"
 					stroke-linecap="round"
 					stroke-linejoin="round"
-				>
-					<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
-				</svg>
+					set:html={openAppArrowHtml}
+				/>
 				<span>Open cloud app</span>
 			</a>
 			<a
@@ -187,10 +187,7 @@ const newsletterDecor = [
 				rel="noopener noreferrer"
 			>
 				<svg viewBox="0 0 24 24" aria-hidden="true" width="18" height="18">
-					<path
-						fill="currentColor"
-						d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 .1.7 1.6 2.7 1.1.1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"
-					></path>
+					<path fill="currentColor" d={githubMarkPath}></path>
 				</svg>
 				<span>Open on GitHub</span>
 			</a>
@@ -313,8 +310,11 @@ const newsletterDecor = [
 								/>
 							</svg>
 						</span>
-						<strong class="feature-q">{feature}</strong>
-						<span class="feature-yes">YES!</span>
+						<div class="feature-entry">
+							<strong class="feature-q">{feature}</strong>
+							<span class="feature-dots" aria-hidden="true"></span>
+							<span class="feature-yes">YES!</span>
+						</div>
 					</li>
 				))
 			}
@@ -386,6 +386,18 @@ const newsletterDecor = [
 								target="_blank"
 								rel="noopener noreferrer"
 							>
+								<svg
+									viewBox="0 0 24 24"
+									aria-hidden="true"
+									width="16"
+									height="16"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									set:html={openAppArrowHtml}
+								/>
 								Open cloud app
 							</a>
 						</td>
@@ -396,6 +408,18 @@ const newsletterDecor = [
 								target="_blank"
 								rel="noopener noreferrer"
 							>
+								<svg
+									viewBox="0 0 24 24"
+									aria-hidden="true"
+									width="16"
+									height="16"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									set:html={openAppArrowHtml}
+								/>
 								Open cloud app
 							</a>
 						</td>
@@ -406,6 +430,9 @@ const newsletterDecor = [
 								target="_blank"
 								rel="noopener noreferrer"
 							>
+								<svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16">
+									<path fill="currentColor" d={githubMarkPath}></path>
+								</svg>
 								Open on GitHub
 							</a>
 						</td>
