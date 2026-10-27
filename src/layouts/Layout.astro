@@ -2,6 +2,8 @@
 interface Props {
 	title: string;
 	description?: string;
+	ogTitle?: string;
+	ogDescription?: string;
 	image?: string;
 }
 
@@ -11,6 +13,8 @@ const defaultDescription =
 const {
 	title,
 	description = defaultDescription,
+	ogTitle = title,
+	ogDescription = description,
 	image = "/og.png",
 } = Astro.props;
 
@@ -39,17 +43,17 @@ const ogImageURL = new URL(image, Astro.site);
 
 		<meta property="og:type" content="website" />
 		<meta property="og:site_name" content="Project Binder" />
-		<meta property="og:title" content={title} />
-		<meta property="og:description" content={description} />
+		<meta property="og:title" content={ogTitle} />
+		<meta property="og:description" content={ogDescription} />
 		<meta property="og:url" content={canonicalURL} />
 		<meta property="og:image" content={ogImageURL} />
-		<meta property="og:image:width" content="1710" />
-		<meta property="og:image:height" content="986" />
-		<meta property="og:image:alt" content="Project Binder - Projects view" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="Project Binder - One binder for all your freelancing work" />
 
 		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content={title} />
-		<meta name="twitter:description" content={description} />
+		<meta name="twitter:title" content={ogTitle} />
+		<meta name="twitter:description" content={ogDescription} />
 		<meta name="twitter:image" content={ogImageURL} />
 	</head>
 	<body>
