@@ -626,11 +626,14 @@ section:first-child {
 	}
 }
 
-#features {
+#features,
+#pricing {
 	border-top: none;
+	scroll-margin-top: 1.25rem;
 }
 
-#features h2 {
+#features h2,
+#pricing h2 {
 	font-size: clamp(1.75rem, 3.5vw, 2.25rem);
 }
 
@@ -687,6 +690,203 @@ section:first-child {
 	font-size: 1.05rem;
 }
 
+/* Pricing */
+.pricing-table-wrap {
+	margin-top: 1.5rem;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	border-radius: 1.1rem;
+	background: color-mix(in srgb, var(--bg-soft) 88%, #fff);
+	box-shadow:
+		0 0 0 1px color-mix(in srgb, var(--line) 70%, transparent),
+		0 8px 28px color-mix(in srgb, var(--side) 5%, transparent);
+}
+
+.pricing-table {
+	width: 100%;
+	min-width: 42rem;
+	table-layout: fixed;
+	border-collapse: collapse;
+	font-size: 0.9375rem;
+	letter-spacing: -0.01em;
+}
+
+.pricing-table th,
+.pricing-table td {
+	padding: 1rem 1.15rem;
+	text-align: left;
+	vertical-align: middle;
+	border-bottom: 1px solid color-mix(in srgb, var(--line) 75%, transparent);
+	color: var(--ink);
+	background: transparent;
+}
+
+.pricing-table thead th {
+	padding-top: 1.35rem;
+	padding-bottom: 1.2rem;
+	font-weight: 600;
+	color: var(--ink);
+	border-bottom-color: color-mix(in srgb, var(--line) 90%, transparent);
+}
+
+.pricing-table thead th:not(:first-child),
+.pricing-table tbody td {
+	text-align: center;
+}
+
+.pricing-plan {
+	display: block;
+	font-size: 1.05rem;
+	font-weight: 650;
+	letter-spacing: -0.02em;
+}
+
+.pricing-tag {
+	display: inline-block;
+	margin-top: 0.45rem;
+	padding: 0.22rem 0.55rem;
+	border-radius: 980px;
+	background: color-mix(in srgb, var(--ink-muted) 12%, transparent);
+	color: var(--ink-muted);
+	font-size: 0.68rem;
+	font-weight: 650;
+	letter-spacing: 0.04em;
+	line-height: 1.3;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+.pricing-tag-pro {
+	background: color-mix(in srgb, var(--pc-plum) 18%, #fff);
+	color: color-mix(in srgb, var(--pc-plum) 78%, #000);
+	letter-spacing: 0.01em;
+	text-transform: none;
+	font-weight: 600;
+	font-size: 0.75rem;
+	white-space: normal;
+}
+
+.pricing-col-pro {
+	background: color-mix(in srgb, var(--pc-sky) 5%, transparent);
+}
+
+.pricing-table thead th.pricing-col-pro {
+	border-radius: 0.85rem 0.85rem 0 0;
+}
+
+.pricing-table col {
+	width: 25%;
+}
+
+.pricing-table tbody th {
+	font-weight: 500;
+	color: var(--ink-muted);
+}
+
+.pricing-table tbody td {
+	font-weight: 550;
+}
+
+.pricing-table tbody tr.pricing-row-prose td {
+	font-weight: 450;
+	font-size: 0.875rem;
+	line-height: 1.45;
+	color: var(--ink-muted);
+	vertical-align: top;
+}
+
+.pricing-actions th,
+.pricing-actions td {
+	border-bottom: none;
+	padding-top: 1.25rem;
+	padding-bottom: 1.35rem;
+}
+
+.pricing-cta {
+	padding: 0.55rem 1rem;
+	border-radius: 980px;
+	font-size: 0.8125rem;
+	font-weight: 600;
+	white-space: nowrap;
+	text-decoration: none;
+}
+
+.pricing-feature {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+}
+
+.pricing-tip {
+	position: relative;
+	display: inline-flex;
+	vertical-align: middle;
+}
+
+.pricing-tip-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1rem;
+	height: 1rem;
+	padding: 0;
+	border: none;
+	border-radius: 50%;
+	background: color-mix(in srgb, var(--ink-muted) 18%, transparent);
+	color: var(--ink-muted);
+	font-size: 0.65rem;
+	font-weight: 700;
+	font-style: italic;
+	font-family: Georgia, "Times New Roman", serif;
+	line-height: 1;
+}
+
+.pricing-tip-btn:hover,
+.pricing-tip-btn:focus-visible {
+	background: var(--pc-sky);
+	color: #fff;
+}
+
+.pricing-tip-btn:focus-visible {
+	outline: 2px solid color-mix(in srgb, var(--pc-sky) 45%, transparent);
+	outline-offset: 2px;
+}
+
+.pricing-tip-bubble {
+	position: absolute;
+	left: 50%;
+	bottom: calc(100% + 0.55rem);
+	z-index: 5;
+	width: max-content;
+	max-width: 15.5rem;
+	padding: 0.7rem 0.85rem;
+	border-radius: 0.75rem;
+	background: color-mix(in srgb, var(--side) 92%, #000);
+	color: #fff;
+	font-size: 0.8rem;
+	font-weight: 500;
+	line-height: 1.35;
+	letter-spacing: 0;
+	text-align: left;
+	white-space: normal;
+	pointer-events: none;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateX(-50%) translateY(0.15rem);
+	transition:
+		opacity 0.15s ease,
+		transform 0.15s ease,
+		visibility 0.15s ease;
+}
+
+.pricing-tip:hover .pricing-tip-bubble,
+.pricing-tip:focus-within .pricing-tip-bubble,
+.pricing-tip.is-open .pricing-tip-bubble {
+	opacity: 1;
+	visibility: visible;
+	transform: translateX(-50%) translateY(0);
+}
+
 /* Final CTA — newsletter */
 #final-cta {
 	display: flex;
@@ -702,13 +902,22 @@ section:first-child {
 }
 
 #final-cta h2 {
-	margin: 0 0 1.75rem;
+	margin: 0 0 0.75rem;
 	font-size: clamp(2.25rem, 6vw, 3.5rem);
 	letter-spacing: -0.03em;
 	color: #fff;
 }
 
+.newsletter-desc {
+	margin: 0 0 1.75rem;
+	max-width: 26rem;
+	font-size: 1.05rem;
+	line-height: 1.45;
+	color: color-mix(in srgb, #fff 88%, transparent);
+}
+
 .newsletter-form {
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	gap: 0.75rem;
@@ -751,6 +960,38 @@ section:first-child {
 
 .newsletter-form button:hover {
 	background: color-mix(in srgb, #fff 92%, var(--ink));
+}
+
+.newsletter-form button:disabled {
+	opacity: 0.7;
+	cursor: wait;
+}
+
+.newsletter-honeypot {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.newsletter-status {
+	margin: 0.25rem 0 0;
+	font-size: 0.95rem;
+	line-height: 1.4;
+	color: color-mix(in srgb, #fff 88%, transparent);
+}
+
+.newsletter-status[data-kind="error"] {
+	color: #ffe4e4;
+}
+
+.newsletter-status[data-kind="ok"] {
+	color: #fff;
 }
 
 @media (max-width: 720px) {
@@ -853,6 +1094,35 @@ section:first-child {
 		font-size: clamp(0.85rem, 3.6vw, 1.05rem);
 		column-gap: 0.5rem;
 		padding: 0.5rem 0;
+	}
+
+	.pricing-table {
+		font-size: 0.875rem;
+	}
+
+	.pricing-table th,
+	.pricing-table td {
+		padding: 0.85rem 0.8rem;
+	}
+
+	.pricing-plan {
+		font-size: 0.95rem;
+	}
+
+	.pricing-cta {
+		padding: 0.5rem 0.8rem;
+		font-size: 0.75rem;
+	}
+
+	.pricing-tip-bubble {
+		left: 0;
+		transform: translateX(0) translateY(0.15rem);
+	}
+
+	.pricing-tip:hover .pricing-tip-bubble,
+	.pricing-tip:focus-within .pricing-tip-bubble,
+	.pricing-tip.is-open .pricing-tip-bubble {
+		transform: translateX(0) translateY(0);
 	}
 
 	.feature-check {

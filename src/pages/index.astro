@@ -50,6 +50,37 @@ const features = [
 	"Can I import / export / backup my data?",
 ];
 
+const pricingRows = [
+	{
+		feature: "Active projects",
+		tip: "How many projects you can keep active at once. Archive or delete a project to free up a slot.",
+		freeCloud: "3",
+		proCloud: "Unlimited",
+		selfHosted: "Unlimited",
+	},
+	{
+		feature: "Total file storage",
+		tip: "The combined size of all your files, attachments, and data.",
+		freeCloud: "200 MB",
+		proCloud: "Unlimited",
+		selfHosted: "Unlimited",
+	},
+	{
+		feature: "Public read-only links",
+		tip: "Share a tab or whole project with a link so clients can review it.",
+		freeCloud: "0",
+		proCloud: "Unlimited",
+		selfHosted: "Unlimited",
+	},
+	{
+		feature: "Who's it for",
+		prose: true,
+		freeCloud: "Beginner or part-time freelancers",
+		proCloud: "Profesisonal, full-time freelancers",
+		selfHosted: "Technical freelancers who want their own server",
+	},
+];
+
 const titleChips = [
 	{
 		label: "Tasks",
@@ -68,13 +99,13 @@ const titleChips = [
 		icon: `<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9l-.81-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>`,
 	},
 	{
-		label: "Databases",
+		label: "Records",
 		icon: `<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/>`,
 	},
 ];
 ---
 
-<Layout title="Project Binder — Free project management for freelancers">
+<Layout title="Project Binder - Open-source project management for freelancers">
 	<section id="hero">
 		<h1>
 			Open-source project management for freelancers with
@@ -118,7 +149,7 @@ const titleChips = [
 				>
 					<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
 				</svg>
-				<span>Open Cloud App</span>
+				<span>Open cloud app</span>
 			</a>
 			<a
 				class="cta cta-black"
@@ -148,7 +179,7 @@ const titleChips = [
 						>
 							<Image
 								src={shot.image}
-								alt={`Project Binder — ${shot.label}`}
+								alt={`Project Binder - ${shot.label}`}
 								widths={[640, 960, 1280, 1710]}
 								sizes="(max-width: 960px) 100vw, 960px"
 								quality={85}
@@ -165,7 +196,7 @@ const titleChips = [
 							<div class="screenshot-frame">
 								<Image
 									src={shot.image}
-									alt={`Project Binder — ${shot.label}`}
+									alt={`Project Binder - ${shot.label}`}
 									widths={[480, 720, 960]}
 									sizes="(max-width: 720px) 78vw, 480px"
 									quality={85}
@@ -261,16 +292,118 @@ const titleChips = [
 		</ul>
 	</section>
 
+	<section id="pricing">
+		<h2>Pricing</h2>
+		<div class="pricing-table-wrap">
+			<table class="pricing-table">
+				<colgroup>
+					<col />
+					<col />
+					<col />
+					<col />
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col"></th>
+						<th scope="col">
+							<span class="pricing-plan">Cloud Free</span>
+							<span class="pricing-tag">FREE FOREVER</span>
+						</th>
+						<th scope="col" class="pricing-col-pro">
+							<span class="pricing-plan">Cloud Pro</span>
+							<span class="pricing-tag pricing-tag-pro">$4.99/m or $49.99/y</span>
+						</th>
+						<th scope="col">
+							<span class="pricing-plan">Self-host</span>
+							<span class="pricing-tag">FREE FOREVER</span>
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					{
+						pricingRows.map((row) => (
+							<tr class={row.prose ? "pricing-row-prose" : undefined}>
+								<th scope="row">
+									<span class="pricing-feature">
+										{row.feature}
+										{row.tip ? (
+											<span class="pricing-tip">
+												<button
+													type="button"
+													class="pricing-tip-btn"
+													aria-label={`About ${row.feature}`}
+												>
+													i
+												</button>
+												<span class="pricing-tip-bubble" role="tooltip">
+													{row.tip}
+												</span>
+											</span>
+										) : null}
+									</span>
+								</th>
+								<td>{row.freeCloud}</td>
+								<td class="pricing-col-pro">{row.proCloud}</td>
+								<td>{row.selfHosted}</td>
+							</tr>
+						))
+					}
+					<tr class="pricing-actions">
+						<th scope="row"></th>
+						<td>
+							<a
+								class="cta cta-blue pricing-cta"
+								href="https://cloud.projectbinder.app"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								Open cloud app
+							</a>
+						</td>
+						<td class="pricing-col-pro">
+							<a
+								class="cta cta-blue pricing-cta"
+								href="https://cloud.projectbinder.app"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								Open cloud app
+							</a>
+						</td>
+						<td>
+							<a
+								class="cta cta-black pricing-cta"
+								href="https://github.com/gaborpinterweb/project-binder"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								Open on GitHub
+							</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</section>
+
 	<section id="final-cta">
 		<h2>Project Binder news</h2>
-		<form
-			class="newsletter-form"
-			action="https://buttondown.com/api/emails/embed-subscribe/gaborpinterweb"
-			method="post"
-			target="popupwindow"
-		>
+		<p class="newsletter-desc">
+			Sign up for news and tips about Project Binder.<br />
+			No spam ever. Unsubscribe anytime.
+		</p>
+		<form class="newsletter-form" action="/api/subscribe" method="post" data-newsletter-form>
+			<label class="newsletter-honeypot" aria-hidden="true">
+				Company
+				<input
+					type="text"
+					name="company"
+					tabindex="-1"
+					autocomplete="off"
+				/>
+			</label>
 			<input
-				id="bd-email"
+				id="newsletter-email"
 				type="email"
 				name="email"
 				required
@@ -279,11 +412,68 @@ const titleChips = [
 				aria-label="Email"
 			/>
 			<button type="submit">Subscribe</button>
+			<p class="newsletter-status" data-newsletter-status role="status" aria-live="polite" hidden></p>
 		</form>
 	</section>
 </Layout>
 
 <script>
+	const newsletterForm = document.querySelector("[data-newsletter-form]");
+	if (newsletterForm instanceof HTMLFormElement) {
+		const status = newsletterForm.querySelector("[data-newsletter-status]");
+		const submitButton = newsletterForm.querySelector('button[type="submit"]');
+
+		function setStatus(message: string, kind: "ok" | "error" | "info") {
+			if (!(status instanceof HTMLElement)) return;
+			status.hidden = !message;
+			status.textContent = message;
+			status.dataset.kind = kind;
+		}
+
+		const params = new URLSearchParams(window.location.search);
+		const newsletterState = params.get("newsletter");
+		if (newsletterState === "confirmed") {
+			setStatus("You're subscribed. Thanks for joining.", "ok");
+			params.delete("newsletter");
+			const next = `${window.location.pathname}${params.toString() ? `?${params}` : ""}${window.location.hash}`;
+			window.history.replaceState({}, "", next);
+		} else if (newsletterState === "invalid") {
+			setStatus("That confirmation link is invalid or expired. Subscribe again.", "error");
+			params.delete("newsletter");
+			const next = `${window.location.pathname}${params.toString() ? `?${params}` : ""}${window.location.hash}`;
+			window.history.replaceState({}, "", next);
+		}
+
+		newsletterForm.addEventListener("submit", async (event) => {
+			event.preventDefault();
+			if (submitButton instanceof HTMLButtonElement) {
+				submitButton.disabled = true;
+			}
+			setStatus("Sending confirmation…", "info");
+
+			try {
+				const response = await fetch("/api/subscribe", {
+					method: "POST",
+					body: new FormData(newsletterForm),
+					headers: { Accept: "application/json" },
+				});
+				const result = (await response.json()) as { ok?: boolean; message?: string; error?: string };
+				if (!response.ok || !result.ok) {
+					setStatus(result.error ?? "Something went wrong. Try again.", "error");
+					return;
+				}
+				setStatus(result.message ?? "Check your email to confirm", "ok");
+				newsletterForm.reset();
+			} catch {
+				setStatus("Something went wrong. Try again.", "error");
+			} finally {
+				if (submitButton instanceof HTMLButtonElement) {
+					submitButton.disabled = false;
+				}
+			}
+		});
+	}
+
 	const gallery = document.querySelector("[data-gallery]");
 	if (gallery) {
 		const shots = gallery.querySelectorAll("[data-main-shot]");
@@ -336,6 +526,33 @@ const titleChips = [
 			show(0);
 		}
 	}
+
+	document.querySelectorAll(".pricing-tip").forEach((tip) => {
+		const button = tip.querySelector(".pricing-tip-btn");
+		if (!(button instanceof HTMLButtonElement)) return;
+
+		button.addEventListener("click", (event) => {
+			event.stopPropagation();
+			const willOpen = !tip.classList.contains("is-open");
+			document.querySelectorAll(".pricing-tip.is-open").forEach((other) => {
+				other.classList.remove("is-open");
+			});
+			tip.classList.toggle("is-open", willOpen);
+		});
+	});
+
+	document.addEventListener("click", () => {
+		document.querySelectorAll(".pricing-tip.is-open").forEach((tip) => {
+			tip.classList.remove("is-open");
+		});
+	});
+
+	document.addEventListener("keydown", (event) => {
+		if (event.key !== "Escape") return;
+		document.querySelectorAll(".pricing-tip.is-open").forEach((tip) => {
+			tip.classList.remove("is-open");
+		});
+	});
 
 	const switcher = document.querySelector("[data-app-switcher]");
 	if (switcher instanceof HTMLElement) {

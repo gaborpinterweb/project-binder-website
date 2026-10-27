@@ -6,7 +6,7 @@ interface Props {
 }
 
 const defaultDescription =
-	"Free project management for freelancers with tasks, timelogs, notes, files, databases and more.";
+	"Open-source project management for freelancers with tasks, timelogs, notes, files and records";
 
 const {
 	title,
@@ -39,7 +39,7 @@ const ogImageURL = new URL(image, Astro.site);
 		<meta property="og:image" content={ogImageURL} />
 		<meta property="og:image:width" content="1710" />
 		<meta property="og:image:height" content="986" />
-		<meta property="og:image:alt" content="Project Binder — Projects view" />
+		<meta property="og:image:alt" content="Project Binder - Projects view" />
 
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content={title} />
@@ -63,6 +63,7 @@ const ogImageURL = new URL(image, Astro.site);
 			</button>
 			<nav id="site-nav">
 				<a href="/#features">Features</a>
+				<a href="/#pricing">Pricing</a>
 				<a href="/feedback">Feedback</a>
 				<a
 					href="https://github.com/gaborpinterweb/project-binder"
