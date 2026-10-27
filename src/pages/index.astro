@@ -1,26 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import {
-	AppleFinderIcon,
-	CheckListIcon,
-	Clock01Icon,
-	Folder01Icon,
-	GoogleDocIcon,
-	GoogleDriveIcon,
-	GoogleSheetIcon,
-	InboxIcon,
-	LightbulbIcon,
-	Mail01Icon,
-	Megaphone01Icon,
-	NewspaperIcon,
-	Note01Icon,
-	Notion02Icon,
-	SparklesIcon,
-	TaskDone01Icon,
-	TrelloIcon,
-} from "@hugeicons/core-free-icons";
 import { ArrowUpRight, BellRing } from "lucide";
-import HugeIcon from "../components/HugeIcon.astro";
 import Layout from "../layouts/Layout.astro";
 import { hugeIconHtml } from "../lib/hugeicon";
 import projectsShot from "../assets/screenshots/projects.png";
@@ -35,15 +15,6 @@ const openAppArrowHtml = hugeIconHtml(ArrowUpRight);
 const githubMarkPath =
 	"M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 .1.7 1.6 2.7 1.1.1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3";
 
-const switcherApps = [
-	{ label: "Finder", icon: AppleFinderIcon },
-	{ label: "Trello", icon: TrelloIcon },
-	{ label: "Notion", icon: Notion02Icon },
-	{ label: "Google Drive", icon: GoogleDriveIcon },
-	{ label: "Google Sheets", icon: GoogleSheetIcon },
-	{ label: "Google Docs", icon: GoogleDocIcon },
-];
-
 const screenshots = [
 	{ id: "projects", label: "Projects", image: projectsShot },
 	{ id: "tasks", label: "Tasks", image: tasksShot },
@@ -55,16 +26,17 @@ const screenshots = [
 
 const features = [
 	"Is Project Binder open-source?",
-	"Can I manage tasks on a Kanban board?",
-	"Can I add files to my tasks?",
-	"Can I see all my tasks at once on a master board?",
+	"Can I manage project tasks on a Kanban board?",
+	"Can I manage all my tasks at once on a Master board?",
 	"Can I track time using a stopwatch or countdown timer?",
 	"Can I see my timelogs grouped by projects and date?",
 	"Can I take notes and build a knowledge base?",
 	"Can I use markdown and add tables and images to my notes?",
+	"Can I add files to my tasks?",
 	"Can I store files with my projects?",
 	"Can I preview PDF, DOCX, XLSX, PPTX and other files?",
 	"Can I create databases for my projects?",
+	"Can I share a project with a client via a public link?",
 	"Can I import / export / backup my data?",
 ];
 
@@ -98,67 +70,18 @@ const pricingRows = [
 		selfHosted: "Technical freelancers who want their own server",
 	},
 ];
-
-const titleChips = [
-	{
-		label: "Tasks",
-		icon: `<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>`,
-	},
-	{
-		label: "Timelogs",
-		icon: `<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>`,
-	},
-	{
-		label: "Notes",
-		icon: `<path d="M2 6a2 2 0 0 1 2-2h10l4 4v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2Z"/><path d="M14 4v4h4"/><path d="M8 13h6"/><path d="M8 17h4"/>`,
-	},
-	{
-		label: "Files",
-		icon: `<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9l-.81-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>`,
-	},
-	{
-		label: "Records",
-		icon: `<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/>`,
-	},
-];
-
-const newsletterDecor = [
-	{ icon: Mail01Icon, size: 58, x: "6%", y: "18%", rotate: "-14deg", tone: "a" },
-	{ icon: NewspaperIcon, size: 50, x: "18%", y: "72%", rotate: "10deg", tone: "b" },
-	{ icon: Megaphone01Icon, size: 56, x: "88%", y: "22%", rotate: "16deg", tone: "a" },
-	{ icon: CheckListIcon, size: 48, x: "78%", y: "68%", rotate: "-8deg", tone: "c" },
-	{ icon: TaskDone01Icon, size: 52, x: "12%", y: "48%", rotate: "8deg", tone: "b" },
-	{ icon: Note01Icon, size: 46, x: "92%", y: "52%", rotate: "-18deg", tone: "a" },
-	{ icon: Clock01Icon, size: 50, x: "28%", y: "14%", rotate: "12deg", tone: "c" },
-	{ icon: Folder01Icon, size: 48, x: "70%", y: "12%", rotate: "-12deg", tone: "b" },
-	{ icon: LightbulbIcon, size: 42, x: "4%", y: "78%", rotate: "20deg", tone: "c" },
-	{ icon: SparklesIcon, size: 40, x: "58%", y: "78%", rotate: "-6deg", tone: "a" },
-	{ icon: InboxIcon, size: 50, x: "46%", y: "8%", rotate: "4deg", tone: "b" },
-];
 ---
 
-<Layout title="Project Binder - Open-source project management for freelancers">
+<Layout
+	title="Project Binder - One binder for all your freelancing work"
+	description="Project Binder is an open-source project management application with tasks, timelogs, notes, files and records."
+>
 	<section id="hero">
-		<h1>Open-source project management for freelancers</h1>
-		<ul class="hero-topics" aria-label="What you can organise">
-			{
-				titleChips.map((chip) => (
-					<li class="title-chip">
-						<svg
-							viewBox="0 0 24 24"
-							aria-hidden="true"
-							fill="none"
-							stroke="currentColor"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							set:html={chip.icon}
-						/>
-						{chip.label}
-					</li>
-				))
-			}
-		</ul>
+		<h1>One binder for all your freelancing work</h1>
+		<p class="hero-lede">
+			Project Binder is an open-source project management application<br />
+			with tasks, time tracking, notes, files and databases.
+		</p>
 		<div class="hero-ctas">
 			<a
 				class="cta cta-blue"
@@ -260,37 +183,6 @@ const newsletterDecor = [
 				}
 			</ul>
 		</div>
-	</section>
-
-	<section id="problem">
-		<p class="eyebrow">The problem</p>
-		<h2>Context switching makes you<br class="br-desktop" />unfocused and exhausted</h2>
-		<div
-			class="app-switcher"
-			data-app-switcher
-			role="img"
-			aria-label="macOS app switcher showing Finder, Trello, Notion, Google Drive, Google Sheets, and Google Docs"
-		>
-			<div class="app-switcher-rail">
-				<span class="app-switcher-highlight" data-switcher-highlight aria-hidden="true"></span>
-				<ul class="app-switcher-apps">
-					{
-						switcherApps.map((app) => (
-							<li class="app-switcher-item">
-								<span class="app-switcher-icon">
-									<HugeIcon icon={app.icon} size={36} />
-								</span>
-							</li>
-						))
-					}
-				</ul>
-			</div>
-		</div>
-		<p>
-			Project Binder provides you a simple, yet scalable workspace<br class="br-desktop" />
-			to organise your freelancing business,<br class="br-desktop" />
-			so deep work feels possible again.
-		</p>
 	</section>
 
 	<section id="features">
@@ -443,18 +335,6 @@ const newsletterDecor = [
 	</section>
 
 	<section id="final-cta">
-		<div class="newsletter-decor" aria-hidden="true">
-			{
-				newsletterDecor.map((item) => (
-					<span
-						class:list={["newsletter-decor-icon", `tone-${item.tone}`]}
-						style={`--x: ${item.x}; --y: ${item.y}; --r: ${item.rotate};`}
-					>
-						<HugeIcon icon={item.icon} size={item.size} />
-					</span>
-				))
-			}
-		</div>
 		<h2>Project Binder news</h2>
 		<p class="newsletter-desc">
 			Get Project Binder news, tips and release notes.<br />
@@ -475,7 +355,7 @@ const newsletterDecor = [
 				type="email"
 				name="email"
 				required
-				placeholder="you@example.com"
+				placeholder="Your email address..."
 				autocomplete="email"
 				aria-label="Email"
 			/>
@@ -636,50 +516,4 @@ const newsletterDecor = [
 			tip.classList.remove("is-open");
 		});
 	});
-
-	const switcher = document.querySelector("[data-app-switcher]");
-	if (switcher instanceof HTMLElement) {
-		const rail = switcher.querySelector(".app-switcher-rail");
-		const highlight = switcher.querySelector("[data-switcher-highlight]");
-		const items = switcher.querySelectorAll(".app-switcher-item");
-		const dwellMs = 4000;
-		const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-		let index = 0;
-
-		function placeHighlight(i: number, returning = false) {
-			if (!(highlight instanceof HTMLElement) || !(rail instanceof HTMLElement)) return;
-			const item = items[i] as HTMLElement | undefined;
-			if (!item) return;
-
-			highlight.classList.toggle("is-return", returning);
-			// Absolute children are positioned from the padding edge; subtract the border
-			// (clientLeft/Top) so the highlight lines up with the item box.
-			const railRect = rail.getBoundingClientRect();
-			const itemRect = item.getBoundingClientRect();
-			const x = itemRect.left - railRect.left - rail.clientLeft + rail.scrollLeft;
-			const y = itemRect.top - railRect.top - rail.clientTop + rail.scrollTop;
-			highlight.style.width = `${itemRect.width}px`;
-			highlight.style.height = `${itemRect.height}px`;
-			highlight.style.transform = `translate(${x}px, ${y}px)`;
-		}
-
-		function scheduleNext() {
-			window.setTimeout(() => {
-				const atLast = index === items.length - 1;
-				index = atLast ? 0 : index + 1;
-				placeHighlight(index, atLast);
-				scheduleNext();
-			}, dwellMs);
-		}
-
-		placeHighlight(0, false);
-		requestAnimationFrame(() => {
-			if (highlight instanceof HTMLElement) highlight.classList.add("is-ready");
-		});
-
-		if (!reduceMotion && items.length > 1) {
-			scheduleNext();
-			window.addEventListener("resize", () => placeHighlight(index, false));
-		}
-	}
 </script>
