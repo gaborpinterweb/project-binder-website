@@ -2,20 +2,35 @@
 import { Image } from "astro:assets";
 import {
 	AppleFinderIcon,
+	CheckListIcon,
+	Clock01Icon,
+	Folder01Icon,
 	GoogleDocIcon,
 	GoogleDriveIcon,
 	GoogleSheetIcon,
+	InboxIcon,
+	LightbulbIcon,
+	Mail01Icon,
+	Megaphone01Icon,
+	NewspaperIcon,
+	Note01Icon,
 	Notion02Icon,
+	SparklesIcon,
+	TaskDone01Icon,
 	TrelloIcon,
 } from "@hugeicons/core-free-icons";
+import { BellRing } from "lucide";
 import HugeIcon from "../components/HugeIcon.astro";
 import Layout from "../layouts/Layout.astro";
+import { hugeIconHtml } from "../lib/hugeicon";
 import projectsShot from "../assets/screenshots/projects.png";
 import tasksShot from "../assets/screenshots/tasks.png";
 import timelogsShot from "../assets/screenshots/timelogs.png";
 import notesShot from "../assets/screenshots/notes.png";
 import filesShot from "../assets/screenshots/files.png";
 import databasesShot from "../assets/screenshots/databases.png";
+
+const subscribeBellHtml = hugeIconHtml(BellRing);
 
 const switcherApps = [
 	{ label: "Finder", icon: AppleFinderIcon },
@@ -102,6 +117,20 @@ const titleChips = [
 		label: "Records",
 		icon: `<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/>`,
 	},
+];
+
+const newsletterDecor = [
+	{ icon: Mail01Icon, size: 58, x: "6%", y: "18%", rotate: "-14deg", tone: "a" },
+	{ icon: NewspaperIcon, size: 50, x: "18%", y: "72%", rotate: "10deg", tone: "b" },
+	{ icon: Megaphone01Icon, size: 56, x: "88%", y: "22%", rotate: "16deg", tone: "a" },
+	{ icon: CheckListIcon, size: 48, x: "78%", y: "68%", rotate: "-8deg", tone: "c" },
+	{ icon: TaskDone01Icon, size: 52, x: "12%", y: "48%", rotate: "8deg", tone: "b" },
+	{ icon: Note01Icon, size: 46, x: "92%", y: "52%", rotate: "-18deg", tone: "a" },
+	{ icon: Clock01Icon, size: 50, x: "28%", y: "14%", rotate: "12deg", tone: "c" },
+	{ icon: Folder01Icon, size: 48, x: "70%", y: "12%", rotate: "-12deg", tone: "b" },
+	{ icon: LightbulbIcon, size: 42, x: "4%", y: "78%", rotate: "20deg", tone: "c" },
+	{ icon: SparklesIcon, size: 40, x: "58%", y: "78%", rotate: "-6deg", tone: "a" },
+	{ icon: InboxIcon, size: 50, x: "46%", y: "8%", rotate: "4deg", tone: "b" },
 ];
 ---
 
@@ -387,9 +416,21 @@ const titleChips = [
 	</section>
 
 	<section id="final-cta">
+		<div class="newsletter-decor" aria-hidden="true">
+			{
+				newsletterDecor.map((item) => (
+					<span
+						class:list={["newsletter-decor-icon", `tone-${item.tone}`]}
+						style={`--x: ${item.x}; --y: ${item.y}; --r: ${item.rotate};`}
+					>
+						<HugeIcon icon={item.icon} size={item.size} />
+					</span>
+				))
+			}
+		</div>
 		<h2>Project Binder news</h2>
 		<p class="newsletter-desc">
-			Sign up for news and tips about Project Binder.<br />
+			Get Project Binder news, tips and release notes.<br />
 			No spam ever. Unsubscribe anytime.
 		</p>
 		<form class="newsletter-form" action="/api/subscribe" method="post" data-newsletter-form>
@@ -411,7 +452,22 @@ const titleChips = [
 				autocomplete="email"
 				aria-label="Email"
 			/>
-			<button type="submit">Subscribe</button>
+			<button type="submit">
+				<svg
+					class="newsletter-submit-icon"
+					viewBox="0 0 24 24"
+					width="18"
+					height="18"
+					aria-hidden="true"
+					fill="currentColor"
+					stroke="currentColor"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					set:html={subscribeBellHtml}
+				/>
+				Subscribe
+			</button>
 			<p class="newsletter-status" data-newsletter-status role="status" aria-live="polite" hidden></p>
 		</form>
 	</section>
