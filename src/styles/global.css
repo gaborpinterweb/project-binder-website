@@ -242,27 +242,93 @@ main {
 	padding: 2.5rem 1.25rem 4rem;
 }
 
+.legal {
+	max-width: var(--max);
+	margin-inline: auto;
+}
+
+.legal h1 {
+	margin-bottom: 0.5rem;
+	font-size: clamp(1.55rem, 3.5vw, 2rem);
+}
+
+.legal-meta {
+	margin-bottom: 2rem;
+	text-align: center;
+	font-size: 1rem;
+}
+
+.legal h2 {
+	margin: 2rem 0 0.65rem;
+	font-size: 1.3rem;
+}
+
+.legal p,
+.legal li {
+	color: var(--ink-muted);
+	font-size: 1.1rem;
+	line-height: 1.65;
+}
+
+.legal ul {
+	margin: 0 0 1rem;
+	padding-left: 1.2rem;
+	list-style: disc;
+}
+
+.legal li {
+	margin-bottom: 0.45rem;
+}
+
+.legal li:last-child {
+	margin-bottom: 0;
+}
+
+.legal strong {
+	color: var(--ink);
+	font-weight: 600;
+}
+
+.legal a {
+	color: var(--ink);
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+}
+
+.legal a:hover {
+	color: var(--accent);
+}
+
 footer {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.65rem;
 	max-width: var(--max-wide);
 	margin: 0 auto;
 	padding: 0 1.25rem 2.5rem;
 	text-align: center;
 }
 
-footer p {
+footer p,
+.footer-nav a,
+.footer-credit a {
 	margin: 0;
 	font-size: 0.9rem;
-	color: var(--ink-muted);
-}
-
-footer a {
 	font-weight: inherit;
-	color: inherit;
+	color: var(--ink-muted);
 	text-decoration: none;
 }
 
-footer a:hover {
-	color: inherit;
+.footer-nav {
+	display: flex;
+	align-items: center;
+	gap: 0.85rem;
+}
+
+.footer-nav a:hover,
+.footer-credit a:hover {
+	color: var(--ink);
 	text-decoration: underline;
 }
 
