@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import { ArrowUpRight, BellRing } from "lucide";
+import { ArrowUpRight, BellRing, Cloud, Gem, Server } from "lucide";
 import Layout from "../layouts/Layout.astro";
 import { hugeIconHtml } from "../lib/hugeicon";
 import projectsShot from "../assets/screenshots/projects.png";
@@ -12,6 +12,9 @@ import databasesShot from "../assets/screenshots/databases.png";
 
 const subscribeBellHtml = hugeIconHtml(BellRing);
 const openAppArrowHtml = hugeIconHtml(ArrowUpRight);
+const planCloudHtml = hugeIconHtml(Cloud);
+const planProHtml = hugeIconHtml(Gem);
+const planSelfHostHtml = hugeIconHtml(Server);
 const githubMarkPath =
 	"M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.6-4-1.6-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 .1.7 1.6 2.7 1.1.1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3";
 
@@ -25,19 +28,20 @@ const screenshots = [
 ];
 
 const features = [
-	"Is Project Binder open-source?",
-	"Can I manage project tasks on a Kanban board?",
-	"Can I manage all my tasks at once on a Master board?",
-	"Can I track time using a stopwatch or countdown timer?",
-	"Can I see my timelogs grouped by projects and date?",
-	"Can I take notes and build a knowledge base?",
-	"Can I use markdown and add tables and images to my notes?",
-	"Can I add files to my tasks?",
-	"Can I store files with my projects?",
-	"Can I preview PDF, DOCX, XLSX, PPTX and other files?",
-	"Can I create databases for my projects?",
-	"Can I share a project with a client via a public link?",
-	"Can I import / export / backup my data?",
+	{ q: "Is Project Binder open-source?", yes: true },
+	{ q: "Can I manage project tasks on a Kanban board?", yes: true },
+	{ q: "Can I manage all my tasks at once on a Master board?", yes: true },
+	{ q: "Can I track time using a stopwatch or countdown timer?", yes: true },
+	{ q: "Can I see my timelogs grouped by projects and date?", yes: true },
+	{ q: "Can I take notes and build a knowledge base?", yes: true },
+	{ q: "Can I use markdown and add tables and images to my notes?", yes: true },
+	{ q: "Can I add files to my tasks?", yes: true },
+	{ q: "Can I store files with my projects?", yes: true },
+	{ q: "Can I preview PDF, DOCX, XLSX, PPTX and other files?", yes: true },
+	{ q: "Can I create databases for my projects?", yes: true },
+	{ q: "Can I share a project with a client via a public link?", yes: true },
+	{ q: 'Will "smart" AI features be forced on me?', yes: false },
+	{ q: "Can I import / export / backup my data?", yes: true },
 ];
 
 const pricingRows = [
@@ -70,11 +74,53 @@ const pricingRows = [
 		selfHosted: "Technical freelancers who want their own server",
 	},
 ];
+
+const pricingPlans = [
+	{
+		id: "free",
+		name: "Cloud Free",
+		iconHtml: planCloudHtml,
+		tag: "FREE FOREVER",
+		tagPro: false,
+		valueKey: "freeCloud" as const,
+		pro: false,
+		ctaHref: "https://cloud.projectbinder.app",
+		ctaLabel: "Open cloud app",
+		ctaVariant: "blue" as const,
+		ctaIcon: "arrow" as const,
+	},
+	{
+		id: "pro",
+		name: "Cloud Pro",
+		iconHtml: planProHtml,
+		tag: "$4.99/m or $49.99/y",
+		tagPro: true,
+		valueKey: "proCloud" as const,
+		pro: true,
+		ctaHref: "https://cloud.projectbinder.app",
+		ctaLabel: "Open cloud app",
+		ctaVariant: "blue" as const,
+		ctaIcon: "arrow" as const,
+	},
+	{
+		id: "self",
+		name: "Self-host",
+		iconHtml: planSelfHostHtml,
+		tag: "FREE FOREVER",
+		tagPro: false,
+		valueKey: "selfHosted" as const,
+		pro: false,
+		ctaHref: "https://github.com/gaborpinterweb/project-binder",
+		ctaLabel: "Open on GitHub",
+		ctaVariant: "black" as const,
+		ctaIcon: "github" as const,
+	},
+];
 ---
 
 <Layout
 	title="Project Binder - One binder for all your freelancing work"
-	description="Project Binder is an open-source project management application with tasks, timelogs, notes, files and records."
+	description="Project Binder is an open-source project management application with tasks, time tracking, notes, files and databases."
 >
 	<section id="hero">
 		<h1>One binder for all your freelancing work</h1>
@@ -190,22 +236,33 @@ const pricingRows = [
 		<ul>
 			{
 				features.map((feature) => (
-					<li>
+					<li class={feature.yes ? undefined : "feature-hell-no"}>
 						<span class="feature-check" aria-hidden="true">
 							<svg viewBox="0 0 24 24" width="17" height="17" fill="none">
-								<path
-									d="M5 12.5l4.5 4.5L19 7"
-									stroke="currentColor"
-									stroke-width="3"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-								/>
+								{feature.yes ? (
+									<path
+										d="M5 12.5l4.5 4.5L19 7"
+										stroke="currentColor"
+										stroke-width="3"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+									/>
+								) : (
+									<path
+										d="M7 7l10 10M17 7L7 17"
+										stroke="currentColor"
+										stroke-width="3"
+										stroke-linecap="round"
+									/>
+								)}
 							</svg>
 						</span>
 						<div class="feature-entry">
-							<strong class="feature-q">{feature}</strong>
+							<strong class="feature-q">{feature.q}</strong>
 							<span class="feature-dots" aria-hidden="true"></span>
-							<span class="feature-yes">YES!</span>
+							<span class={feature.yes ? "feature-yes" : "feature-no"}>
+								{feature.yes ? "YES!" : "HELL NO!"}
+							</span>
 						</div>
 					</li>
 				))
@@ -226,18 +283,29 @@ const pricingRows = [
 				<thead>
 					<tr>
 						<th scope="col"></th>
-						<th scope="col">
-							<span class="pricing-plan">Cloud Free</span>
-							<span class="pricing-tag">FREE FOREVER</span>
-						</th>
-						<th scope="col" class="pricing-col-pro">
-							<span class="pricing-plan">Cloud Pro</span>
-							<span class="pricing-tag pricing-tag-pro">$4.99/m or $49.99/y</span>
-						</th>
-						<th scope="col">
-							<span class="pricing-plan">Self-host</span>
-							<span class="pricing-tag">FREE FOREVER</span>
-						</th>
+						{
+							pricingPlans.map((plan) => (
+								<th scope="col" class={plan.pro ? "pricing-col-pro" : undefined}>
+									<span class="pricing-plan-icon" aria-hidden="true">
+										<svg
+											viewBox="0 0 24 24"
+											width="22"
+											height="22"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="2"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											set:html={plan.iconHtml}
+										/>
+									</span>
+									<span class="pricing-plan">{plan.name}</span>
+									<span class:list={["pricing-tag", plan.tagPro && "pricing-tag-pro"]}>
+										{plan.tag}
+									</span>
+								</th>
+							))
+						}
 					</tr>
 				</thead>
 				<tbody>
@@ -263,74 +331,137 @@ const pricingRows = [
 										) : null}
 									</span>
 								</th>
-								<td>{row.freeCloud}</td>
-								<td class="pricing-col-pro">{row.proCloud}</td>
-								<td>{row.selfHosted}</td>
+								{pricingPlans.map((plan) => (
+									<td class={plan.pro ? "pricing-col-pro" : undefined}>
+										{row[plan.valueKey]}
+									</td>
+								))}
 							</tr>
 						))
 					}
 					<tr class="pricing-actions">
 						<th scope="row"></th>
-						<td>
-							<a
-								class="cta cta-blue pricing-cta"
-								href="https://cloud.projectbinder.app"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								<svg
-									viewBox="0 0 24 24"
-									aria-hidden="true"
-									width="16"
-									height="16"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									set:html={openAppArrowHtml}
-								/>
-								Open cloud app
-							</a>
-						</td>
-						<td class="pricing-col-pro">
-							<a
-								class="cta cta-blue pricing-cta"
-								href="https://cloud.projectbinder.app"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								<svg
-									viewBox="0 0 24 24"
-									aria-hidden="true"
-									width="16"
-									height="16"
-									fill="none"
-									stroke="currentColor"
-									stroke-width="2"
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									set:html={openAppArrowHtml}
-								/>
-								Open cloud app
-							</a>
-						</td>
-						<td>
-							<a
-								class="cta cta-black pricing-cta"
-								href="https://github.com/gaborpinterweb/project-binder"
-								target="_blank"
-								rel="noopener noreferrer"
-							>
-								<svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16">
-									<path fill="currentColor" d={githubMarkPath}></path>
-								</svg>
-								Open on GitHub
-							</a>
-						</td>
+						{
+							pricingPlans.map((plan) => (
+								<td class={plan.pro ? "pricing-col-pro" : undefined}>
+									<a
+										class:list={[
+											"cta",
+											plan.ctaVariant === "blue" ? "cta-blue" : "cta-black",
+											"pricing-cta",
+										]}
+										href={plan.ctaHref}
+										target="_blank"
+										rel="noopener noreferrer"
+									>
+										{plan.ctaIcon === "arrow" ? (
+											<svg
+												viewBox="0 0 24 24"
+												aria-hidden="true"
+												width="16"
+												height="16"
+												fill="none"
+												stroke="currentColor"
+												stroke-width="2"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												set:html={openAppArrowHtml}
+											/>
+										) : (
+											<svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16">
+												<path fill="currentColor" d={githubMarkPath} />
+											</svg>
+										)}
+										{plan.ctaLabel}
+									</a>
+								</td>
+							))
+						}
 					</tr>
 				</tbody>
 			</table>
+		</div>
+
+		<div class="pricing-cards">
+			{
+				pricingPlans.map((plan) => (
+					<article class:list={["pricing-card", plan.pro && "pricing-card-pro"]}>
+						<header class="pricing-card-header">
+							<span class="pricing-plan-icon" aria-hidden="true">
+								<svg
+									viewBox="0 0 24 24"
+									width="22"
+									height="22"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									set:html={plan.iconHtml}
+								/>
+							</span>
+							<span class="pricing-plan">{plan.name}</span>
+							<span class:list={["pricing-tag", plan.tagPro && "pricing-tag-pro"]}>
+								{plan.tag}
+							</span>
+						</header>
+						<ul class="pricing-card-rows">
+							{pricingRows.map((row) => (
+								<li class={row.prose ? "pricing-card-row-prose" : undefined}>
+									<span class="pricing-feature">
+										{row.feature}
+										{row.tip ? (
+											<span class="pricing-tip">
+												<button
+													type="button"
+													class="pricing-tip-btn"
+													aria-label={`About ${row.feature}`}
+												>
+													i
+												</button>
+												<span class="pricing-tip-bubble" role="tooltip">
+													{row.tip}
+												</span>
+											</span>
+										) : null}
+									</span>
+									<span class="pricing-card-value">{row[plan.valueKey]}</span>
+								</li>
+							))}
+						</ul>
+						<a
+							class:list={[
+								"cta",
+								plan.ctaVariant === "blue" ? "cta-blue" : "cta-black",
+								"pricing-cta",
+							]}
+							href={plan.ctaHref}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							{plan.ctaIcon === "arrow" ? (
+								<svg
+									viewBox="0 0 24 24"
+									aria-hidden="true"
+									width="16"
+									height="16"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									set:html={openAppArrowHtml}
+								/>
+							) : (
+								<svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16">
+									<path fill="currentColor" d={githubMarkPath} />
+								</svg>
+							)}
+							{plan.ctaLabel}
+						</a>
+					</article>
+				))
+			}
 		</div>
 	</section>
 
