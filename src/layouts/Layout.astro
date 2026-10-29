@@ -1,4 +1,6 @@
 ---
+import { ClientRouter, fade } from "astro:transitions";
+
 interface Props {
 	title: string;
 	description?: string;
@@ -31,6 +33,7 @@ const ogImageURL = new URL(image, Astro.site);
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<meta name="theme-color" content="#1d1d1f" />
+		<ClientRouter />
 		<title>{title}</title>
 		<meta name="description" content={description} />
 		<link rel="canonical" href={canonicalURL} />
@@ -57,7 +60,7 @@ const ogImageURL = new URL(image, Astro.site);
 		<meta name="twitter:image" content={ogImageURL} />
 	</head>
 	<body>
-		<header>
+		<header transition:persist="site-header">
 			<a class="brand" href="/">
 				<img src="/project-binder-icon.png" alt="" width="28" height="28" />
 				<span>Project Binder</span>
@@ -101,9 +104,13 @@ const ogImageURL = new URL(image, Astro.site);
 			</nav>
 		</header>
 		<script>
-			const toggle = document.querySelector(".menu-toggle");
-			const nav = document.querySelector("#site-nav");
-			if (toggle instanceof HTMLButtonElement && nav instanceof HTMLElement) {
+			document.addEventListener("astro:page-load", () => {
+				const toggle = document.querySelector(".menu-toggle");
+				const nav = document.querySelector("#site-nav");
+				if (!(toggle instanceof HTMLButtonElement) || !(nav instanceof HTMLElement)) return;
+				if (toggle.dataset.navBound === "true") return;
+				toggle.dataset.navBound = "true";
+
 				const setOpen = (open: boolean) => {
 					toggle.setAttribute("aria-expanded", String(open));
 					toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
@@ -122,9 +129,9 @@ const ogImageURL = new URL(image, Astro.site);
 				document.addEventListener("keydown", (event) => {
 					if (event.key === "Escape") setOpen(false);
 				});
-			}
+			});
 		</script>
-		<main>
+		<main transition:animate={fade({ duration: "0.22s" })}>
 			<slot />
 		</main>
 		<footer>
@@ -140,6 +147,12 @@ const ogImageURL = new URL(image, Astro.site);
 				>.
 			</p>
 		</footer>
+		<script>
+			document.addEventListener("astro:after-swap", () => {
+				if (location.hash) return;
+				window.scrollTo({ left: 0, top: 0, behavior: "instant" });
+			});
+		</script>
 	</body>
 </html>
 

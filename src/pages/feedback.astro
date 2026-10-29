@@ -20,26 +20,78 @@ import Layout from "../layouts/Layout.astro";
 		</div>
 	</section>
 
-	<script is:inline>
-		var d = document,
-			w = "https://tally.so/widgets/embed.js",
-			v = function () {
-				"undefined" != typeof Tally
-					? Tally.loadEmbeds()
-					: d
-							.querySelectorAll("iframe[data-tally-src]:not([src])")
-							.forEach(function (e) {
-								e.src = e.dataset.tallySrc;
-							});
-			};
-		if ("undefined" != typeof Tally) v();
-		else if (d.querySelector('script[src="' + w + '"]') == null) {
-			var s = d.createElement("script");
-			s.src = w;
-			s.onload = v;
-			s.onerror = v;
-			d.body.appendChild(s);
+	<script>
+		declare global {
+			interface Window {
+				Tally?: { loadEmbeds: () => void };
+			}
 		}
+
+		const TALLY_SCRIPT = "https://tally.so/widgets/embed.js";
+
+		function tallyFrames() {
+			return document.querySelectorAll<HTMLIFrameElement>("iframe[data-tally-src]");
+		}
+
+		function fillTallyFrames() {
+			tallyFrames().forEach((frame) => {
+				const src = frame.dataset.tallySrc;
+				if (!src) return;
+				// Force a fresh load after client-side navigations.
+				frame.removeAttribute("src");
+				frame.src = src;
+			});
+		}
+
+		function loadTallyScript(): Promise<void> {
+			if (window.Tally) return Promise.resolve();
+
+			const existing = document.querySelector<HTMLScriptElement>(`script[src="${TALLY_SCRIPT}"]`);
+			if (existing) {
+				return new Promise((resolve) => {
+					if (window.Tally) {
+						resolve();
+						return;
+					}
+					let settled = false;
+					const finish = () => {
+						if (settled) return;
+						settled = true;
+						resolve();
+					};
+					existing.addEventListener("load", finish, { once: true });
+					existing.addEventListener("error", finish, { once: true });
+					// load may have already fired before we attached listeners
+					window.setTimeout(finish, 100);
+				});
+			}
+
+			return new Promise((resolve) => {
+				const script = document.createElement("script");
+				script.src = TALLY_SCRIPT;
+				script.async = true;
+				script.onload = () => resolve();
+				script.onerror = () => resolve();
+				document.body.appendChild(script);
+			});
+		}
+
+		async function initTally() {
+			if (!tallyFrames().length) return;
+
+			await loadTallyScript();
+			if (window.Tally) {
+				// Ensure embeds are eligible for Tally.loadEmbeds().
+				tallyFrames().forEach((frame) => frame.removeAttribute("src"));
+				window.Tally.loadEmbeds();
+			} else {
+				fillTallyFrames();
+			}
+		}
+
+		document.addEventListener("astro:page-load", () => {
+			void initTally();
+		});
 	</script>
 </Layout>
 

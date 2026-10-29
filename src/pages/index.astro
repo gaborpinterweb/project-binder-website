@@ -514,139 +514,145 @@ const pricingPlans = [
 </Layout>
 
 <script>
-	const newsletterForm = document.querySelector("[data-newsletter-form]");
-	if (newsletterForm instanceof HTMLFormElement) {
-		const status = newsletterForm.querySelector("[data-newsletter-status]");
-		const submitButton = newsletterForm.querySelector('button[type="submit"]');
+	let pricingTipGlobalsBound = false;
 
-		function setStatus(message: string, kind: "ok" | "error" | "info") {
-			if (!(status instanceof HTMLElement)) return;
-			status.hidden = !message;
-			status.textContent = message;
-			status.dataset.kind = kind;
-		}
+	document.addEventListener("astro:page-load", () => {
+		const newsletterForm = document.querySelector("[data-newsletter-form]");
+		if (newsletterForm instanceof HTMLFormElement) {
+			const status = newsletterForm.querySelector("[data-newsletter-status]");
+			const submitButton = newsletterForm.querySelector('button[type="submit"]');
 
-		const params = new URLSearchParams(window.location.search);
-		const newsletterState = params.get("newsletter");
-		if (newsletterState === "confirmed") {
-			setStatus("You're subscribed. Thanks for joining.", "ok");
-			params.delete("newsletter");
-			const next = `${window.location.pathname}${params.toString() ? `?${params}` : ""}${window.location.hash}`;
-			window.history.replaceState({}, "", next);
-		} else if (newsletterState === "invalid") {
-			setStatus("That confirmation link is invalid or expired. Subscribe again.", "error");
-			params.delete("newsletter");
-			const next = `${window.location.pathname}${params.toString() ? `?${params}` : ""}${window.location.hash}`;
-			window.history.replaceState({}, "", next);
-		}
-
-		newsletterForm.addEventListener("submit", async (event) => {
-			event.preventDefault();
-			if (submitButton instanceof HTMLButtonElement) {
-				submitButton.disabled = true;
+			function setStatus(message: string, kind: "ok" | "error" | "info") {
+				if (!(status instanceof HTMLElement)) return;
+				status.hidden = !message;
+				status.textContent = message;
+				status.dataset.kind = kind;
 			}
-			setStatus("Sending confirmation…", "info");
 
-			try {
-				const response = await fetch("/api/subscribe", {
-					method: "POST",
-					body: new FormData(newsletterForm),
-					headers: { Accept: "application/json" },
-				});
-				const result = (await response.json()) as { ok?: boolean; message?: string; error?: string };
-				if (!response.ok || !result.ok) {
-					setStatus(result.error ?? "Something went wrong. Try again.", "error");
-					return;
-				}
-				setStatus(result.message ?? "Check your email to confirm", "ok");
-				newsletterForm.reset();
-			} catch {
-				setStatus("Something went wrong. Try again.", "error");
-			} finally {
+			const params = new URLSearchParams(window.location.search);
+			const newsletterState = params.get("newsletter");
+			if (newsletterState === "confirmed") {
+				setStatus("You're subscribed. Thanks for joining.", "ok");
+				params.delete("newsletter");
+				const next = `${window.location.pathname}${params.toString() ? `?${params}` : ""}${window.location.hash}`;
+				window.history.replaceState({}, "", next);
+			} else if (newsletterState === "invalid") {
+				setStatus("That confirmation link is invalid or expired. Subscribe again.", "error");
+				params.delete("newsletter");
+				const next = `${window.location.pathname}${params.toString() ? `?${params}` : ""}${window.location.hash}`;
+				window.history.replaceState({}, "", next);
+			}
+
+			newsletterForm.addEventListener("submit", async (event) => {
+				event.preventDefault();
 				if (submitButton instanceof HTMLButtonElement) {
-					submitButton.disabled = false;
+					submitButton.disabled = true;
 				}
-			}
-		});
-	}
+				setStatus("Sending confirmation…", "info");
 
-	const gallery = document.querySelector("[data-gallery]");
-	if (gallery) {
-		const shots = gallery.querySelectorAll("[data-main-shot]");
-		const thumbs = gallery.querySelectorAll("[data-thumb]");
-		const slider = gallery.querySelector("[data-slider]");
-		const slides = gallery.querySelectorAll("[data-slide]");
-		const count = shots.length;
-
-		function show(index: number) {
-			const current = ((index % count) + count) % count;
-			shots.forEach((shot, i) => {
-				(shot as HTMLElement).hidden = i !== current;
-			});
-			thumbs.forEach((thumb, i) => {
-				thumb.setAttribute("aria-current", i === current ? "true" : "false");
-			});
-			slides.forEach((slide, i) => {
-				slide.classList.toggle("is-active", i === current);
-			});
-		}
-
-		thumbs.forEach((thumb) => {
-			thumb.addEventListener("click", () => {
-				const index = Number((thumb as HTMLElement).dataset.index);
-				show(index);
-			});
-		});
-
-		if (slider instanceof HTMLElement && slides.length > 0) {
-			const syncFromScroll = () => {
-				const sliderRect = slider.getBoundingClientRect();
-				const center = sliderRect.left + sliderRect.width / 2;
-				let nearest = 0;
-				let nearestDist = Infinity;
-				slides.forEach((slide, i) => {
-					const rect = (slide as HTMLElement).getBoundingClientRect();
-					const dist = Math.abs(rect.left + rect.width / 2 - center);
-					if (dist < nearestDist) {
-						nearestDist = dist;
-						nearest = i;
+				try {
+					const response = await fetch("/api/subscribe", {
+						method: "POST",
+						body: new FormData(newsletterForm),
+						headers: { Accept: "application/json" },
+					});
+					const result = (await response.json()) as { ok?: boolean; message?: string; error?: string };
+					if (!response.ok || !result.ok) {
+						setStatus(result.error ?? "Something went wrong. Try again.", "error");
+						return;
 					}
-				});
-				show(nearest);
-			};
-
-			slider.addEventListener("scroll", () => {
-				window.requestAnimationFrame(syncFromScroll);
-			}, { passive: true });
-
-			show(0);
-		}
-	}
-
-	document.querySelectorAll(".pricing-tip").forEach((tip) => {
-		const button = tip.querySelector(".pricing-tip-btn");
-		if (!(button instanceof HTMLButtonElement)) return;
-
-		button.addEventListener("click", (event) => {
-			event.stopPropagation();
-			const willOpen = !tip.classList.contains("is-open");
-			document.querySelectorAll(".pricing-tip.is-open").forEach((other) => {
-				other.classList.remove("is-open");
+					setStatus(result.message ?? "Check your email to confirm", "ok");
+					newsletterForm.reset();
+				} catch {
+					setStatus("Something went wrong. Try again.", "error");
+				} finally {
+					if (submitButton instanceof HTMLButtonElement) {
+						submitButton.disabled = false;
+					}
+				}
 			});
-			tip.classList.toggle("is-open", willOpen);
-		});
-	});
+		}
 
-	document.addEventListener("click", () => {
-		document.querySelectorAll(".pricing-tip.is-open").forEach((tip) => {
-			tip.classList.remove("is-open");
-		});
-	});
+		const gallery = document.querySelector("[data-gallery]");
+		if (gallery) {
+			const shots = gallery.querySelectorAll("[data-main-shot]");
+			const thumbs = gallery.querySelectorAll("[data-thumb]");
+			const slider = gallery.querySelector("[data-slider]");
+			const slides = gallery.querySelectorAll("[data-slide]");
+			const count = shots.length;
 
-	document.addEventListener("keydown", (event) => {
-		if (event.key !== "Escape") return;
-		document.querySelectorAll(".pricing-tip.is-open").forEach((tip) => {
-			tip.classList.remove("is-open");
+			function show(index: number) {
+				const current = ((index % count) + count) % count;
+				shots.forEach((shot, i) => {
+					(shot as HTMLElement).hidden = i !== current;
+				});
+				thumbs.forEach((thumb, i) => {
+					thumb.setAttribute("aria-current", i === current ? "true" : "false");
+				});
+				slides.forEach((slide, i) => {
+					slide.classList.toggle("is-active", i === current);
+				});
+			}
+
+			thumbs.forEach((thumb) => {
+				thumb.addEventListener("click", () => {
+					const index = Number((thumb as HTMLElement).dataset.index);
+					show(index);
+				});
+			});
+
+			if (slider instanceof HTMLElement && slides.length > 0) {
+				const syncFromScroll = () => {
+					const sliderRect = slider.getBoundingClientRect();
+					const center = sliderRect.left + sliderRect.width / 2;
+					let nearest = 0;
+					let nearestDist = Infinity;
+					slides.forEach((slide, i) => {
+						const rect = (slide as HTMLElement).getBoundingClientRect();
+						const dist = Math.abs(rect.left + rect.width / 2 - center);
+						if (dist < nearestDist) {
+							nearestDist = dist;
+							nearest = i;
+						}
+					});
+					show(nearest);
+				};
+
+				slider.addEventListener("scroll", () => {
+					window.requestAnimationFrame(syncFromScroll);
+				}, { passive: true });
+
+				show(0);
+			}
+		}
+
+		document.querySelectorAll(".pricing-tip").forEach((tip) => {
+			const button = tip.querySelector(".pricing-tip-btn");
+			if (!(button instanceof HTMLButtonElement)) return;
+
+			button.addEventListener("click", (event) => {
+				event.stopPropagation();
+				const willOpen = !tip.classList.contains("is-open");
+				document.querySelectorAll(".pricing-tip.is-open").forEach((other) => {
+					other.classList.remove("is-open");
+				});
+				tip.classList.toggle("is-open", willOpen);
+			});
 		});
+
+		if (!pricingTipGlobalsBound) {
+			pricingTipGlobalsBound = true;
+			document.addEventListener("click", () => {
+				document.querySelectorAll(".pricing-tip.is-open").forEach((tip) => {
+					tip.classList.remove("is-open");
+				});
+			});
+			document.addEventListener("keydown", (event) => {
+				if (event.key !== "Escape") return;
+				document.querySelectorAll(".pricing-tip.is-open").forEach((tip) => {
+					tip.classList.remove("is-open");
+				});
+			});
+		}
 	});
 </script>
