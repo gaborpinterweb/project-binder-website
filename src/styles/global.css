@@ -307,15 +307,36 @@ main {
 	margin-bottom: 2rem;
 }
 
-.changelog h2 {
-	margin: 2rem 0 0.65rem;
-	font-family: var(--font-sans);
-	font-size: 1.3rem;
+.changelog-releases {
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
 }
 
-.changelog h3 {
-	margin: 1.25rem 0 0.5rem;
-	font-size: 1.1rem;
+.changelog-release {
+	padding: 1.35rem 1.4rem 1.45rem;
+	border: 1px solid var(--line);
+	border-radius: calc(var(--radius) + 4px);
+	background: var(--bg-raised);
+}
+
+.changelog-release h2 {
+	margin: 0 0 0.85rem;
+	font-family: var(--font-sans);
+	font-size: 1.25rem;
+}
+
+.changelog-release h3 {
+	margin: 1.15rem 0 0.5rem;
+	font-size: 1.05rem;
+}
+
+.changelog-release h3:first-of-type {
+	margin-top: 0.15rem;
+}
+
+.changelog-release ul:last-child {
+	margin-bottom: 0;
 }
 
 .changelog-fallback {

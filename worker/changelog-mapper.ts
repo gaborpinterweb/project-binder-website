@@ -185,8 +185,8 @@ export function mapChangelogToDisplayHtml(
 		const body = release.bodyMarkdown
 			? `\n${renderChangelogBodyHtml(release.bodyMarkdown)}`
 			: "";
-		return `<h2>${title}</h2>${body}`;
+		return `<article class="changelog-release"><h2>${title}</h2>${body}</article>`;
 	});
 
-	return `${intro}\n${sections.join("\n")}`;
+	return `${intro}\n<div class="changelog-releases">\n${sections.join("\n")}\n</div>`;
 }
