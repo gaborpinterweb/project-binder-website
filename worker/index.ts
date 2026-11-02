@@ -1,11 +1,10 @@
-import { mapChangelogToDisplayMarkdown } from "./changelog-mapper";
+import { mapChangelogToDisplayHtml } from "./changelog-mapper";
 
 const REPO = "gaborpinterweb/project-binder";
 const LATEST_API = `https://api.github.com/repos/${REPO}/releases/latest`;
 const FALLBACK = `https://github.com/${REPO}/releases/latest`;
 const CHANGELOG_RAW = `https://raw.githubusercontent.com/${REPO}/main/CHANGELOG.md`;
 const CHANGELOG_BLOB = `https://github.com/${REPO}/blob/main/CHANGELOG.md`;
-const MARKDOWN_API = "https://api.github.com/markdown";
 const CHANGELOG_MARKER_START = "<!--CHANGELOG_CONTENT-->";
 const CHANGELOG_MARKER_END = "<!--/CHANGELOG_CONTENT-->";
 const CACHE_TTL_SECONDS = 600;
@@ -444,31 +443,15 @@ async function fetchChangelogMarkdown(): Promise<string | null> {
 		},
 	});
 
-	if (!response.ok) return null;
+	if (!response.ok) {
+		console.error("changelog raw fetch failed", response.status);
+		return null;
+	}
 
 	const toCache = new Response(response.clone().body, response);
 	toCache.headers.set("Cache-Control", `public, max-age=${CACHE_TTL_SECONDS}`);
 	void cache.put(cacheKey, toCache.clone());
 
-	return response.text();
-}
-
-async function renderChangelogMarkdown(markdown: string): Promise<string | null> {
-	const response = await fetch(MARKDOWN_API, {
-		method: "POST",
-		headers: {
-			Accept: "application/vnd.github+json",
-			"Content-Type": "application/json",
-			"User-Agent": USER_AGENT,
-		},
-		body: JSON.stringify({
-			text: markdown,
-			mode: "gfm",
-			context: REPO,
-		}),
-	});
-
-	if (!response.ok) return null;
 	return response.text();
 }
 
@@ -500,14 +483,7 @@ async function handleChangelog(request: Request, env: Env): Promise<Response> {
 	try {
 		const markdown = await fetchChangelogMarkdown();
 		if (markdown) {
-			const displayMarkdown = mapChangelogToDisplayMarkdown(
-				markdown,
-				CHANGELOG_BLOB,
-			);
-			const rendered = await renderChangelogMarkdown(displayMarkdown);
-			if (rendered) {
-				contentHtml = rendered;
-			}
+			contentHtml = mapChangelogToDisplayHtml(markdown, CHANGELOG_BLOB);
 		}
 	} catch (error) {
 		console.error("changelog failed", error);
