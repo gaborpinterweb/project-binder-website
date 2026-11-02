@@ -1,0 +1,22 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const githubChangelog =
+	"https://github.com/gaborpinterweb/project-binder/blob/main/CHANGELOG.md";
+---
+
+<Layout
+	title="Changelog - Project Binder"
+	description="Release notes and changes for Project Binder."
+>
+	<section class="legal changelog">
+		<h1>Changelog</h1>
+		<!--CHANGELOG_CONTENT-->
+		<p class="changelog-fallback">
+			<a href={githubChangelog} target="_blank" rel="noopener noreferrer">
+				View the changelog on GitHub
+			</a>
+		</p>
+		<!--/CHANGELOG_CONTENT-->
+	</section>
+</Layout>

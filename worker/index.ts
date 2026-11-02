@@ -1,6 +1,11 @@
 const REPO = "gaborpinterweb/project-binder";
 const LATEST_API = `https://api.github.com/repos/${REPO}/releases/latest`;
 const FALLBACK = `https://github.com/${REPO}/releases/latest`;
+const CHANGELOG_RAW = `https://raw.githubusercontent.com/${REPO}/main/CHANGELOG.md`;
+const CHANGELOG_BLOB = `https://github.com/${REPO}/blob/main/CHANGELOG.md`;
+const MARKDOWN_API = "https://api.github.com/markdown";
+const CHANGELOG_MARKER_START = "<!--CHANGELOG_CONTENT-->";
+const CHANGELOG_MARKER_END = "<!--/CHANGELOG_CONTENT-->";
 const CACHE_TTL_SECONDS = 600;
 const CONFIRM_TTL_SECONDS = 48 * 60 * 60;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -416,12 +421,128 @@ async function handleDownload(request: Request): Promise<Response> {
 	}
 }
 
+async function fetchChangelogMarkdown(): Promise<string | null> {
+	const cache = caches.default;
+	const cacheKey = new Request(CHANGELOG_RAW, {
+		headers: {
+			Accept: "text/plain",
+			"User-Agent": USER_AGENT,
+		},
+	});
+
+	const cached = await cache.match(cacheKey);
+	if (cached?.ok) {
+		return cached.text();
+	}
+
+	const response = await fetch(CHANGELOG_RAW, {
+		headers: {
+			Accept: "text/plain",
+			"User-Agent": USER_AGENT,
+		},
+	});
+
+	if (!response.ok) return null;
+
+	const toCache = new Response(response.clone().body, response);
+	toCache.headers.set("Cache-Control", `public, max-age=${CACHE_TTL_SECONDS}`);
+	void cache.put(cacheKey, toCache.clone());
+
+	return response.text();
+}
+
+async function renderChangelogMarkdown(markdown: string): Promise<string | null> {
+	const response = await fetch(MARKDOWN_API, {
+		method: "POST",
+		headers: {
+			Accept: "application/vnd.github+json",
+			"Content-Type": "application/json",
+			"User-Agent": USER_AGENT,
+		},
+		body: JSON.stringify({
+			text: markdown,
+			mode: "gfm",
+			context: REPO,
+		}),
+	});
+
+	if (!response.ok) return null;
+	return response.text();
+}
+
+function changelogErrorHtml(): string {
+	return `<p>Could not load the changelog right now. <a href="${CHANGELOG_BLOB}" target="_blank" rel="noopener noreferrer">View it on GitHub</a>.</p>`;
+}
+
+function injectChangelog(shellHtml: string, contentHtml: string): string | null {
+	const start = shellHtml.indexOf(CHANGELOG_MARKER_START);
+	const end = shellHtml.indexOf(CHANGELOG_MARKER_END);
+	if (start === -1 || end === -1 || end < start) return null;
+
+	const before = shellHtml.slice(0, start);
+	const after = shellHtml.slice(end + CHANGELOG_MARKER_END.length);
+	return `${before}${contentHtml}${after}`;
+}
+
+function stripLeadingChangelogHeading(markdown: string): string {
+	return markdown.replace(/^#\s+Changelog\s*\r?\n+/i, "");
+}
+
+async function handleChangelog(request: Request, env: Env): Promise<Response> {
+	const shellUrl = new URL("/changelog/", request.url);
+	const shellResponse = await env.ASSETS.fetch(
+		new Request(shellUrl, { method: "GET", headers: request.headers }),
+	);
+	if (!shellResponse.ok) {
+		return shellResponse;
+	}
+	const shellHtml = await shellResponse.text();
+
+	let contentHtml = changelogErrorHtml();
+	try {
+		const markdown = await fetchChangelogMarkdown();
+		if (markdown) {
+			const rendered = await renderChangelogMarkdown(
+				stripLeadingChangelogHeading(markdown),
+			);
+			if (rendered) {
+				contentHtml = rendered;
+			}
+		}
+	} catch (error) {
+		console.error("changelog failed", error);
+	}
+
+	const injected = injectChangelog(shellHtml, contentHtml);
+	if (!injected) {
+		return new Response(shellHtml, {
+			status: shellResponse.status,
+			headers: {
+				"Content-Type": "text/html; charset=utf-8",
+				"Cache-Control": `public, max-age=${CACHE_TTL_SECONDS}`,
+			},
+		});
+	}
+
+	return new Response(injected, {
+		status: 200,
+		headers: {
+			"Content-Type": "text/html; charset=utf-8",
+			"Cache-Control": `public, max-age=${CACHE_TTL_SECONDS}`,
+		},
+	});
+}
+
 export default {
 	async fetch(request: Request, env: Env): Promise<Response> {
 		const url = new URL(request.url);
 
 		if (url.pathname === "/download") {
 			return handleDownload(request);
+		}
+
+		if (url.pathname === "/changelog" || url.pathname === "/changelog/") {
+			return handleChangelog(request, env);
 		}
 
 		if (url.pathname === "/api/subscribe") {

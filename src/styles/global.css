@@ -299,6 +299,24 @@ main {
 	color: var(--accent);
 }
 
+.changelog h1 {
+	margin-bottom: 1.5rem;
+}
+
+.changelog h2 {
+	margin: 2rem 0 0.65rem;
+	font-size: 1.3rem;
+}
+
+.changelog h3 {
+	margin: 1.25rem 0 0.5rem;
+	font-size: 1.1rem;
+}
+
+.changelog-fallback {
+	margin-top: 1rem;
+}
+
 footer {
 	display: flex;
 	flex-direction: column;
