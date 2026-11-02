@@ -1,3 +1,5 @@
+import { mapChangelogToDisplayMarkdown } from "./changelog-mapper";
+
 const REPO = "gaborpinterweb/project-binder";
 const LATEST_API = `https://api.github.com/repos/${REPO}/releases/latest`;
 const FALLBACK = `https://github.com/${REPO}/releases/latest`;
@@ -484,10 +486,6 @@ function injectChangelog(shellHtml: string, contentHtml: string): string | null 
 	return `${before}${contentHtml}${after}`;
 }
 
-function stripLeadingChangelogHeading(markdown: string): string {
-	return markdown.replace(/^#\s+Changelog\s*\r?\n+/i, "");
-}
-
 async function handleChangelog(request: Request, env: Env): Promise<Response> {
 	const shellUrl = new URL("/changelog/", request.url);
 	const shellResponse = await env.ASSETS.fetch(
@@ -502,9 +500,11 @@ async function handleChangelog(request: Request, env: Env): Promise<Response> {
 	try {
 		const markdown = await fetchChangelogMarkdown();
 		if (markdown) {
-			const rendered = await renderChangelogMarkdown(
-				stripLeadingChangelogHeading(markdown),
+			const displayMarkdown = mapChangelogToDisplayMarkdown(
+				markdown,
+				CHANGELOG_BLOB,
 			);
+			const rendered = await renderChangelogMarkdown(displayMarkdown);
 			if (rendered) {
 				contentHtml = rendered;
 			}

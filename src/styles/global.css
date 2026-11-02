@@ -300,7 +300,11 @@ main {
 }
 
 .changelog h1 {
-	margin-bottom: 1.5rem;
+	margin-bottom: 0.5rem;
+}
+
+.changelog > p:first-of-type {
+	margin-bottom: 2rem;
 }
 
 .changelog h2 {
