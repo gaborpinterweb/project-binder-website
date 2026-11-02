@@ -50,14 +50,14 @@ function isUnreleased(version: string): boolean {
 }
 
 function formatReleaseHeading(release: ChangelogRelease): string {
-	let heading = `## [${release.version}]`;
-	if (release.date) {
-		heading += ` - ${release.date}`;
-	}
+	let title = release.version;
 	if (release.codename) {
-		heading += ` (${release.codename})`;
+		title += ` (${release.codename})`;
 	}
-	return heading;
+	if (release.date) {
+		title += ` on ${release.date}`;
+	}
+	return `## ${title}`;
 }
 
 /**
@@ -72,7 +72,7 @@ export function mapChangelogToDisplayMarkdown(
 		(release) => !isUnreleased(release.version),
 	);
 
-	const intro = `This page is generated on demand from the project's [CHANGELOG.md](${changelogUrl}) on GitHub.`;
+	const intro = `A short history of what is new, fixed, or improved in each Project Binder release. This page is built on demand from the project's [CHANGELOG.md](${changelogUrl}) on GitHub.`;
 
 	if (releases.length === 0) {
 		return intro;
